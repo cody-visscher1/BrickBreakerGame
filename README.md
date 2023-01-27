@@ -14,9 +14,9 @@ Clone this repository USING SSH. If you do not you will have to enter your SSH k
 
 2. run the following commands:
 
-  *cd .ssh
+  cd .ssh
   
-  *ssh-keygen -t rsa (use id_rsa)
+  ssh-keygen -t rsa (use id_rsa)
   
  3. cat id_rsa.pub
   
