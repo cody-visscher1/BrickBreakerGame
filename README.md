@@ -14,17 +14,17 @@ Clone this repository USING SSH. If you do not you will have to enter your SSH k
 
 2. run the following commands:
 
-  cd .ssh
+  *cd .ssh
   
-  ssh-keygen -t rsa (use id_rsa)
+  *ssh-keygen -t rsa (use id_rsa)
   
-  cat id_rsa.pub
+ 3. cat id_rsa.pub
   
-  copy the entire output.
+ 4. copy the entire output.
   
-  go to your account settings - SSH and GPG Keys
+ 5. go to your account settings - SSH and GPG Keys
   
-  New SSH key, give it a name, and paste the key in text field.
+ 6. New SSH key, give it a name, and paste the key in text field.
   
   
 
