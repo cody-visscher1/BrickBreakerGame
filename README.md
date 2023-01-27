@@ -9,3 +9,8 @@ Clone this repository USING SSH. If you do not you will have to enter your SSH k
 (git clone [ssh key]).
 
 Once you do that you should be good to go.
+
+
+**UPDATE**
+
+We now have a stable brick breaker game. It looks terrible, but is fully functional.
