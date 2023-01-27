@@ -1,5 +1,5 @@
 # BrickBreakerGame
-Brick Breaker Game (java) for CIS 350.
+Brick Breaker Game (java) for CIS 350.\n
 
 When setting up git, make a directory in your Ubuntu terminal (Ex. mkdir BrickBreaker)
 Change to that directory (cd BrickBreaker)
