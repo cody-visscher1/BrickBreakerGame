@@ -1,12 +1,10 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
-public class BrickGame extends JPanel implements KeyListener, ActionListener {
+public class BrickGame extends JPanel implements KeyListener, ActionListener, MouseMotionListener {
 
     private boolean play = false;
     private int score = 0;
@@ -22,7 +20,8 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener {
 
     public BrickGame() {
         map = new Generator(3,7);
-        addKeyListener(this);
+        addKeyListener(this); // allows us to use keys for moving the paddle
+        addMouseMotionListener(this); // allows us to use the mouse to move the paddle.
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         timer = new Timer(delay, this);
@@ -172,5 +171,28 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener {
     public void moveLeft(){
         play = true;
         playerX-=20;
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        if(playerX >= 580) {
+            playerX = 580;
+        }
+        else {
+            play = true;
+            playerX = e.getX();
+        }
+        if(playerX < 10) {
+            playerX = 10;
+        }
+        else {
+            play = true;
+            playerX = e.getX();
+        }
     }
 }
