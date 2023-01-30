@@ -8,23 +8,7 @@ Change to that directory (cd BrickBreaker)
 Clone this repository USING SSH. If you do not you will have to enter your SSH key every time you push something to GitHub.
 (git clone [ssh key]).
 
-***IF YOU DON'T HAVE AN SSH KEY YET***
-
-1. open your Ubuntu terminal
-
-2. run the following commands:
-
-  cd .ssh
-  
-  ssh-keygen -t rsa (use id_rsa)
-  
-  cat id_rsa.pub
-  
- 3. copy the entire output.
-  
- 4. go to your account settings - SSH and GPG Keys
-  
- 5. New SSH key, give it a name, and paste the key in text field.
+*** A helpful command for viewing files is 'explorer.exe .' It works in windows and linux.
   
   
 
