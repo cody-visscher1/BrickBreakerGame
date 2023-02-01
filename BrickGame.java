@@ -12,10 +12,6 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
     private Timer timer;
     private int delay = 8;
     private int playerX = 310;
-    private int ballPosX = 120;
-    private int ballPosY = 350;
-    private int ballXDir = -1;
-    private int ballYDir = -2;
     private Generator map;
     private Ball ball;
 
@@ -77,23 +73,23 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
     public void actionPerformed(ActionEvent e){
         timer.start();
         if(play) {
-            if(new Rectangle(ball.getPosX(), ball.getPosY(), ball.getWidth(), ball.getHeight()).intersects(new Rectangle( playerX + 40, 550, 20, 8))){
+            if(new Rectangle(ball.getPosX() + ball.getWidth() / 2, ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle( playerX + 40, 550, 20, 8))){
                 ball.setYDir(-1*(ball.getYDir()));
                 ball.setXDir(0);
             }
-            else if(new Rectangle(ball.getPosX(), ball.getPosY(), ball.getWidth(), ball.getHeight()).intersects(new Rectangle(playerX + 20, 550, 20, 8))) {
+            else if(new Rectangle(ball.getPosX() + ball.getWidth() / 2, ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX + 20, 550, 20, 8))) {
                 ball.setYDir(-1*(ball.getYDir()));
                 ball.setXDir(-1);
             }
-            else if(new Rectangle(ball.getPosX(), ball.getPosY(), ball.getWidth(), ball.getHeight()).intersects(new Rectangle(playerX + 60, 550, 20, 8))) {
+            else if(new Rectangle(ball.getPosX() + ball.getWidth() / 2, ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX + 60, 550, 20, 8))) {
                 ball.setYDir(-1*(ball.getYDir()));
                 ball.setXDir(1);
             }
-            else if(new Rectangle(ball.getPosX(), ball.getPosY(), ball.getWidth(), ball.getHeight()).intersects(new Rectangle(playerX, 550, 20, 8))) {
+            else if(new Rectangle(ball.getPosX() + ball.getWidth() / 2, ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX, 550, 20, 8))) {
                 ball.setYDir(-1*(ball.getYDir()));
                 ball.setXDir(-2);
             }
-            else if(new Rectangle(ball.getPosX(), ball.getPosY(), ball.getWidth(), ball.getHeight()).intersects(new Rectangle(playerX + 80, 550, 20, 8))) {
+            else if(new Rectangle(ball.getPosX() + ball.getWidth() / 2, ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX + 80, 550, 20, 8))) {
                 ball.setYDir(-1*(ball.getYDir()));
                 ball.setXDir(2);
             }
@@ -165,7 +161,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
 
         if(e.getKeyCode() == KeyEvent.VK_ENTER) {
             if(!play) {
-                ballPosX = 120;
+                ball.setPosX(120);
                 ball.setPosX(120);
                 ball.setPosY(350);
                 ball.setXDir(-1);
