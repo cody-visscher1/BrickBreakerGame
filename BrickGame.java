@@ -3,12 +3,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public class BrickGame extends JPanel implements KeyListener, ActionListener, MouseMotionListener {
 
     private boolean play = false;
     private int score = 0;
-    private int totalBricks = 21;
+    private int totalBricks = 200;
     private Timer timer;
     private int delay = 8;
     private int playerX = 310;
@@ -17,7 +18,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
 
     public BrickGame() {
         ball = new Ball();
-        map = new Generator(3,7);
+        map = new Generator(10,20);
         addKeyListener(this); // allows us to use keys for moving the paddle
         addMouseMotionListener(this); // allows us to use the mouse to move the paddle.
         setFocusable(true);
@@ -26,12 +27,21 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
         timer.start();
     }
 
+    /**
+     * Shows all the objects that are in the frame
+     * @param g
+     */
     public void paint(Graphics g){
+        // Sets the color you are using to draw an object to black
         g.setColor(Color.BLACK);
+        // Creates a rectangle and paints it black
         g.fillRect(1,1,692,592);
+        // Draws the map onto the frame.
         map.draw((Graphics2D) g);
         g.setColor(Color.YELLOW);
+        // Creates a yellow border on the x-axis
         g.fillRect(0,0,3,592);
+        // creates a yellow border on the y-axis
         g.fillRect(0,0,692,3);
         g.fillRect(691, 0, 3, 592);
 
@@ -44,7 +54,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
 
         // Change to ball
         g.setColor(ball.getColor());
-        g.fillOval(ball.getPosX(), ball.getPosY(), ball.getWidth(), ball.getHeight());
+        g.fillOval((int)ball.getPosX(), (int)ball.getPosY(), ball.getWidth(), ball.getHeight());
 
         if(ball.getPosY() > 570) {
             play = false;
@@ -73,26 +83,31 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
     public void actionPerformed(ActionEvent e){
         timer.start();
         if(play) {
-            if(new Rectangle(ball.getPosX() + ball.getWidth() / 2, ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle( playerX + 40, 550, 20, 8))){
+            if(new Rectangle((int)(ball.getPosX() + ball.getWidth() / 2), (int)ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle( playerX, 550, 100, 8))){
                 ball.setYDir(-1*(ball.getYDir()));
-                ball.setXDir(0);
+                double center = playerX + 50;
+                double adjustment = (center - ball.getPosX()) * 0.05;
+                if(Math.abs(adjustment) < 3.01) {
+                    ball.setXDir(-1 * adjustment);
+                }
+                else if(Math.abs(adjustment) > 0.2) {
+                    if(adjustment > 0) {
+                        ball.setXDir(-0.5);
+                    }
+                    else {
+                        ball.setXDir(0.5);
+                    }
+                }
+                else {
+                    if(adjustment < 0) {
+                        ball.setXDir(3);
+                    }
+                    else {
+                        ball.setXDir(-3);
+                    }
+                }
             }
-            else if(new Rectangle(ball.getPosX() + ball.getWidth() / 2, ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX + 20, 550, 20, 8))) {
-                ball.setYDir(-1*(ball.getYDir()));
-                ball.setXDir(-1);
-            }
-            else if(new Rectangle(ball.getPosX() + ball.getWidth() / 2, ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX + 60, 550, 20, 8))) {
-                ball.setYDir(-1*(ball.getYDir()));
-                ball.setXDir(1);
-            }
-            else if(new Rectangle(ball.getPosX() + ball.getWidth() / 2, ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX, 550, 20, 8))) {
-                ball.setYDir(-1*(ball.getYDir()));
-                ball.setXDir(-2);
-            }
-            else if(new Rectangle(ball.getPosX() + ball.getWidth() / 2, ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX + 80, 550, 20, 8))) {
-                ball.setYDir(-1*(ball.getYDir()));
-                ball.setXDir(2);
-            }
+
             A:
             for(int i = 0; i < map.map.length; i++) {
                 for(int j = 0; j < map.map[0].length; j++){
@@ -102,8 +117,9 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                         int brickWidth = map.brickWidth;
                         int brickHeight = map.brickHeight;
 
+                        // Checks to see if the ball intersects with a brick, and if it does, removes the brick.
                         Rectangle rect = new Rectangle(brickX, brickY, brickWidth, brickHeight);
-                        Rectangle ballrect = new Rectangle(ball.getPosX(), ball.getPosY(), ball.getWidth(), ball.getHeight());
+                        Rectangle ballrect = new Rectangle((int)ball.getPosX(), (int)ball.getPosY(), ball.getWidth(), ball.getHeight());
                         Rectangle brickrect = rect;
                         if(ballrect.intersects(brickrect)) {
                             map.setBrickValue(0, i, j);
@@ -120,8 +136,8 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                     }
                 }
             }
-            ball.setPosX(ball.getPosX() + ball.getXDir());
-            ball.setPosY(ball.getPosY() + ball.getYDir());
+            ball.setPosX(ball.getPosX() + (int)ball.getXDir());
+            ball.setPosY(ball.getPosY() + (int)ball.getYDir());
             if(ball.getPosX()<0) {
                 ball.setXDir(-1*(ball.getXDir()));
             }
@@ -169,7 +185,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                 score = 0;
                 playerX = 310;
                 totalBricks = 21;
-                map = new Generator(3,7);
+                map = new Generator(10, 20);
                 repaint();
             }
         }
