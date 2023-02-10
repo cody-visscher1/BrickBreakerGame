@@ -1,53 +1,63 @@
 import java.awt.*;
 
 public class Ball {
-    private int posX;
-    private int posY;
-    private int xDir;
-    private int yDir;
+    private double posX;
+    private double posY;
+    private double xDir;
+    private double yDir;
     private int width;
     private int height;
     private Color color;
 
     public Ball () {
         color = Color.GREEN;
-        height = 20;
-        width = 20;
+        height = 13;
+        width = 13;
         yDir = -2;
-        xDir = -1;
+        xDir = 1;
         posY = 350;
         posX = 120;
     }
 
-    public int getPosX() {
+    public Ball(double xDir, double yDir, double posX, double posY) {
+        color = Color.GREEN;
+        height = 13;
+        width = 13;
+        this.yDir = yDir;
+        this.xDir = xDir;
+        this.posX = posX;
+        this.posY = posY;
+    }
+
+    public double getPosX() {
         return posX;
     }
 
-    public void setPosX(int PosX) {
+    public void setPosX(double PosX) {
         this.posX = PosX;
     }
 
-    public int getPosY() {
+    public double getPosY() {
         return posY;
     }
 
-    public void setPosY(int PosY) {
+    public void setPosY(double PosY) {
         this.posY = PosY;
     }
 
-    public int getXDir() {
+    public double getXDir() {
         return xDir;
     }
 
-    public void setXDir(int XDir) {
+    public void setXDir(double XDir) {
         this.xDir = XDir;
     }
 
-    public int getYDir() {
+    public double getYDir() {
         return yDir;
     }
 
-    public void setYDir(int YDir) {
+    public void setYDir(double YDir) {
         this.yDir = YDir;
     }
 
