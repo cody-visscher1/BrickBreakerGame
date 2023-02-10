@@ -6,8 +6,8 @@ public class Brick {
     private Color c;
     public Brick() {
         int color = rand.nextInt(100);
-        if(color < 80)
-            c = Color.red;
+        if(color < 90)
+            c = Color.WHITE;
         else if(color < 95)
             c = Color.MAGENTA;
         else
