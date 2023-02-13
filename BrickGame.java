@@ -2,9 +2,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class BrickGame extends JPanel implements KeyListener, ActionListener, MouseMotionListener {
 
@@ -82,8 +80,9 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             g.drawString("Press Enter to Restart", 190, 340);
 
         }
-        if (ballList.isEmpty()) {
+        if (ballList.isEmpty() && totalBricks != 0) {
             play = false;
+            map.clearMap();
             g.setColor(Color.RED);
             g.setFont(new Font("serif", Font.BOLD, 30));
             g.drawString("Game Over Score : " + score, 190, 300);
@@ -112,18 +111,8 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                     if (Math.abs(adjustment) < 3.01) {
                         ball.setXDir(-1 * adjustment);
                     }
-                    else if (Math.abs(adjustment) > 0.2) {
-                        if (adjustment > 0) {
-                            ball.setXDir(-0.5);
-                        } else {
-                            ball.setXDir(0.5);
-                        }
-                    } else {
-                        if (adjustment < 0) {
-                            ball.setXDir(3);
-                        } else {
-                            ball.setXDir(-3);
-                        }
+                    else {
+                        ball.setXDir(-3 * ball.getXDir());
                     }
                 }
             }
@@ -158,10 +147,11 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                                         ballList.get(ballList.size() - 1).setXDir(-1);
                                     }
                                 }
+                                // If the color is blue, three balls are added going three different directions from where the users paddle is.
                                 else if(Generator.brickArray.get(i * 20 + j).getColor() == Color.BLUE) {
-                                    ballList.add(new Ball(-1, -2, playerX, 520));
-                                    ballList.add(new Ball(0, -2, playerX, 520));
-                                    ballList.add(new Ball(1, -2, playerX, 520));
+                                    ballList.add(new Ball(-1, -2, playerX + 50, 520));
+                                    ballList.add(new Ball(0, -2, playerX + 50, 520));
+                                    ballList.add(new Ball(1, -2, playerX + 50, 520));
                                 }
                                 break A;
                             }
@@ -226,7 +216,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                 ball.setYDir(-2);
                 score = 0;
                 playerX = 310;
-                totalBricks = 21;
+                totalBricks = 200;
                 map = new Generator(10, 20);
                 repaint();
             }
