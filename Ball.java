@@ -9,26 +9,50 @@ public class Ball {
     private int height;
     private Color color;
 
+    /**
+     * Base Constructor for balls
+     */
     public Ball () {
         color = Color.GREEN;
-        height = 13;
-        width = 13;
+        height = 11;
+        width = 11;
         yDir = -2;
         xDir = 1;
         posY = 350;
         posX = 120;
     }
 
+    /**
+     * Specified Constructor for balls
+     * @param xDir the horizontal direction that the ball should move
+     * @param yDir the vertical direction that the ball should move
+     * @param posX the position of the ball on the x-axis
+     * @param posY the position of the ball on the y-axis
+     */
     public Ball(double xDir, double yDir, double posX, double posY) {
         color = Color.GREEN;
-        height = 13;
-        width = 13;
+        height = 11;
+        width = 11;
         this.yDir = yDir;
         this.xDir = xDir;
         this.posX = posX;
         this.posY = posY;
     }
 
+    public Ball(int height, int width) {
+        this.height = height;
+        this.width = width;
+        color = Color.GREEN;
+        this.yDir = -2;
+        this.xDir = -1;
+        this.posX = 120;
+        this.posY = 350;
+    }
+
+    /**
+     * Getter and setter methods below
+     * @return the value of each variable stored within the ball.
+     */
     public double getPosX() {
         return posX;
     }
