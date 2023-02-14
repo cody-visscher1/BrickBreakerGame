@@ -13,14 +13,16 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
     private int delay = 8;
     private int playerX = 310;
     private Generator map;
+    private Generator temp;
     private ArrayList<Ball> ballList = new ArrayList<>();
+    public boolean win = false;
 
     /**
      * Constructor
      */
     public BrickGame() {
-        ballList.add(new Ball());
         map = new Generator(10,20);
+        ballList.add(new Ball());
         addKeyListener(this); // allows us to use keys for moving the paddle
         addMouseMotionListener(this); // allows us to use the mouse to move the paddle.
         setFocusable(true);
@@ -70,6 +72,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             }
         }
         if(totalBricks == 0) {
+            map.randomBricks();
             play = false;
             for(int i = 0; i < ballList.size(); i++) {
                 ballList.remove(i);
@@ -81,6 +84,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
 
         }
         if (ballList.isEmpty() && totalBricks != 0) {
+            map.randomBricks();
             play = false;
             map.clearMap();
             g.setColor(Color.RED);
