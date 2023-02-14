@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Generator {
     public double[][] map;
@@ -47,6 +48,21 @@ public class Generator {
         for(int i = 0; i < map.length; i++) {
             for(int j = 0; j < map[0].length; j++) {
                 setBrickValue(0, i, j);
+            }
+        }
+    }
+
+    public void randomBricks() {
+        Random rand = new Random();
+        for(int i = 0; i < map.length; i++) {
+            for(int j = 0; j < map[0].length; j++) {
+                int num = rand.nextInt(101);
+                if(num < 90)
+                    brickArray.get(i * map.length + j).setColor(Color.WHITE);
+                else if(num < 95)
+                    brickArray.get(i * map.length + j).setColor(Color.MAGENTA);
+                else
+                    brickArray.get(i * map.length + j).setColor(Color.BLUE);
             }
         }
     }
