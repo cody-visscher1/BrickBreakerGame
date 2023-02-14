@@ -54,16 +54,14 @@ public class Generator {
 
     public void randomBricks() {
         Random rand = new Random();
-        for(int i = 0; i < map.length; i++) {
-            for(int j = 0; j < map[0].length; j++) {
-                int num = rand.nextInt(101);
-                if(num < 90)
-                    brickArray.get(i * map.length + j).setColor(Color.WHITE);
-                else if(num < 95)
-                    brickArray.get(i * map.length + j).setColor(Color.MAGENTA);
-                else
-                    brickArray.get(i * map.length + j).setColor(Color.BLUE);
-            }
+        for(Brick b : brickArray) {
+            int num = rand.nextInt(101);
+            if(num < 90)
+                b.setColor(Color.WHITE);
+            else if(num < 95)
+                b.setColor(Color.MAGENTA);
+            else
+                b.setColor(Color.BLUE);
         }
     }
 
