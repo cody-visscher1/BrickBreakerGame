@@ -15,7 +15,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
     private Generator map;
     private Generator temp;
     private ArrayList<Ball> ballList = new ArrayList<>();
-    public boolean win = false;
+    private boolean win = false;
 
     /**
      * Constructor
@@ -35,7 +35,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      * Shows all the objects that are in the frame
      *
      * Also checks win and lose conditions
-     * @param g
+     * @param g the graphics tool that is being used
      */
     public void paint(Graphics g){
         // Sets the color you are using to draw an object to black
@@ -56,44 +56,46 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
         g.drawString(""+score, 590, 30);
 
         g.setColor(Color.RED);
-        g.fillRect(playerX, 550, 100, 8);
+        g.fillRect(playerX, 550, 100, 8); // creates the player paddle
 
-        // Change to ball
+        // Iterating through all the balls in the ballList and draws them in the panel
         for(int i = 0; i < ballList.size(); i++) {
             Ball ball = ballList.get(i);
             g.setColor(ball.getColor());
             g.fillOval((int) ball.getPosX(), (int) ball.getPosY(), ball.getWidth(), ball.getHeight());
 
-
+            // Checks to see if the current ball is outside the boundaries of the game,
+            // and if it is, it removes it.
             if (ball.getPosY() > 570) {
                 ball.setYDir(0);
                 ball.setXDir(0);
                 ballList.remove(i);
             }
         }
+        // Win condition
         if(totalBricks == 0) {
-            map.randomBricks();
-            play = false;
-            for(int i = 0; i < ballList.size(); i++) {
+            win = true;
+            map.randomBricks(); // Reassigns the colors of the bricks in the map.
+            play = false; // Stops the game from running without further user interaction.
+            for(int i = 0; i < ballList.size(); i++) { // Removes all the balls from the ballList to make sure that the game starts with only one ball
                 ballList.remove(i);
             }
-            g.setColor(Color.red);
+            g.setColor(Color.red); // sets color to red and draws the win message
             g.setFont(new Font("serif", Font.BOLD, 30));
             g.drawString("YOU WIN",220,300);
             g.drawString("Press Enter to Restart", 190, 340);
 
         }
-        if (ballList.isEmpty() && totalBricks != 0) {
-            map.randomBricks();
-            play = false;
-            map.clearMap();
-            g.setColor(Color.RED);
+        if (ballList.isEmpty() && totalBricks != 0) { // Lose condition
+            map.randomBricks(); // Reassigns the colors of the bricks in the map.
+            play = false; // Stops the game from running without further user interaction.
+            map.clearMap(); // Clears the map, so that the user can see the lose condition message completely.
+            g.setColor(Color.RED); // displays lose condition message.
             g.setFont(new Font("serif", Font.BOLD, 30));
             g.drawString("Game Over Score : " + score, 190, 300);
             g.setFont(new Font("serif", Font.BOLD, 30));
             g.drawString("Press Enter to Restart", 190, 340);
         }
-
         g.dispose();
     }
 
@@ -105,14 +107,14 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
     public void actionPerformed(ActionEvent e){
         timer.start();
         if(play) {
-            // Checking for intersections between the ball and the player's paddle.
+            // Checking for intersections between the balls and the player's paddle.
             for(Ball ball : ballList) {
                 if (new Rectangle((int) (ball.getPosX() + ball.getWidth() / 2), (int) ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX, 550, 100, 8))) {
                     ball.setYDir(-1 * (ball.getYDir()));
                     double center = playerX + 50;
                     double adjustment = (center - ball.getPosX()) * 0.05;
-                    // Adjusts the direction of the ball
-                    if (Math.abs(adjustment) < 3.01) {
+                    // Adjusts the  x-axis direction of the ball
+                    if (Math.abs(adjustment) < 3.01) { // Checks to ensure the ball does not begin to move too quickly along the x-axis.
                         ball.setXDir(-1 * adjustment);
                     }
                     else {
@@ -132,27 +134,27 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
 
                         // Checks to see if the ball intersects with a brick, and if it does, removes the brick.
                         for(Ball ball : ballList) {
-                            Rectangle rect = new Rectangle(brickX, brickY, brickWidth, brickHeight);
-                            Rectangle ballrect = new Rectangle((int) ball.getPosX(), (int) ball.getPosY(), ball.getWidth(), ball.getHeight());
-                            Rectangle brickrect = rect;
-                            if (ballrect.intersects(brickrect)) {
-                                map.setBrickValue(0, i, j);
-                                totalBricks--;
-                                score += 5;
-                                if (ball.getPosX() + 19 <= brickrect.x || ball.getPosX() + 1 >= brickrect.x + brickWidth) {
-                                    ball.setXDir(-1 * (ball.getXDir()));
+                            Rectangle brickrect = new Rectangle(brickX, brickY, brickWidth, brickHeight); // Creates a rectangle for the brick to check for intersections
+                            Rectangle ballrect = new Rectangle((int) ball.getPosX(), (int) ball.getPosY(), ball.getWidth(), ball.getHeight()); // Same as above, but ball
+                            if (ballrect.intersects(brickrect)) { // Checks for intersections between the brick and ball
+                                map.setBrickValue(0, i, j); // removes the brick from the frame
+                                totalBricks--; // removes the brick from the count
+                                score += 5; // adjusts the player score
+                                if (ball.getPosX() + 19 <= brickrect.x || ball.getPosX() + 1 >= brickrect.x + brickWidth) { // Checks for an intersection between the ball and brick
+                                    ball.setXDir(-1 * (ball.getXDir())); // adjusts the x-axis direction
                                 } else {
                                     ball.setYDir(-1 * (ball.getYDir()));
                                 }
                                 // Checking the color of the brick to see if there is a power up to be applied
-                                if(Generator.brickArray.get(i * 20 + j).getColor() == Color.MAGENTA) {
-                                    ballList.add(new Ball(-1*ball.getXDir(), ball.getYDir(), ball.getPosX(), ball.getPosY()));
-                                    if(ball.getXDir() == 0) {
-                                        ballList.get(ballList.size() - 1).setXDir(-1);
+                                if(Generator.brickArray.get(i * 20 + j).getColor() == Color.MAGENTA) { // If the brick is Magenta color
+                                    ballList.add(new Ball(-1*ball.getXDir(), ball.getYDir(), ball.getPosX(), ball.getPosY())); // Creates a new ball, but makes it move the opposite direction.
+                                    if(ball.getXDir() == 0) { // if the ball is not moving in a direction across the x-axis.
+                                        ballList.get(ballList.size() - 1).setXDir(-1); // Sets the newest ball's x-axis direction to -1 if the parent's x-axis direction is 0
                                     }
                                 }
                                 // If the color is blue, three balls are added going three different directions from where the users paddle is.
-                                else if(Generator.brickArray.get(i * 20 + j).getColor() == Color.BLUE) {
+                                else if(Generator.brickArray.get(i * 20 + j).getColor() == Color.BLUE) { // Checks to see if the brick is blue color
+                                    // Shoots three new balls out of the paddle.
                                     ballList.add(new Ball(-1, -2, playerX + 50, 520));
                                     ballList.add(new Ball(0, -2, playerX + 50, 520));
                                     ballList.add(new Ball(1, -2, playerX + 50, 520));
@@ -165,8 +167,9 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             }
             // Changes the direction of the ball
             for(Ball ball : ballList) {
-                ball.setPosX(ball.getPosX() + ball.getXDir());
+                ball.setPosX(ball.getPosX() + ball.getXDir()); // adjusts the direction of the ball by incrementing the direction
                 ball.setPosY(ball.getPosY() + ball.getYDir());
+                // Checks if the ball is at the edge of the panel, and changes the direction if it is
                 if (ball.getPosX() < 0) {
                     ball.setXDir(-1 * (ball.getXDir()));
                 }
@@ -192,37 +195,38 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            if(playerX >= 600) {
+        if(e.getKeyCode() == KeyEvent.VK_RIGHT) { // if the key pressed is the right-arrow key
+            if(playerX >= 600) { // doesn't allow the user to go off the screen
                 playerX = 600;
             }
             else {
-                moveRight();
+                moveRight(); // adjusts the paddle position
             }
         }
-        if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-            if(playerX < 10) {
-                playerX = 10;
+        if(e.getKeyCode() == KeyEvent.VK_LEFT) { // if the key pressed is the left-arrow key
+            if(playerX < 0) {
+                playerX = 0;
             }
             else {
-                moveLeft();
+                moveLeft(); // adjusts the paddle position
             }
         }
 
-        if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-            if(!play) {
-                Ball ball = new Ball();
-                ballList.add(ball);
-                ball.setPosX(120);
+        if(e.getKeyCode() == KeyEvent.VK_ENTER) { // if the key pressed is enter
+            if(!play) { // if the game is over
+                Ball ball = new Ball(); // creates a new ball
+                ballList.add(ball); // adds it to the ballList
+                ball.setPosX(120); // resets the new ball's position
                 ball.setPosX(120);
                 ball.setPosY(350);
                 ball.setXDir(-1);
                 ball.setYDir(-2);
-                score = 0;
-                playerX = 310;
-                totalBricks = 200;
-                map = new Generator(10, 20);
-                repaint();
+                if(!win) // if the player lost
+                    score = 0; // resets score to zero
+                playerX = 310; // resets player position
+                totalBricks = 200; // resets the number of bricks
+                map = new Generator(10, 20); // creates a new map (replaces bricks that were gone)
+                repaint(); // paints the new game
             }
         }
     }
@@ -259,6 +263,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      */
     @Override
     public void mouseMoved(MouseEvent e) {
+        // The iff statements just ensure that the user paddle cannot leave the screen.
         if(playerX >= 580) {
             playerX = 580;
         }
@@ -266,8 +271,8 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             play = true;
             playerX = e.getX();
         }
-        if(playerX < 10) {
-            playerX = 10;
+        if(playerX < 1) {
+            playerX = 1;
         }
         else {
             play = true;
