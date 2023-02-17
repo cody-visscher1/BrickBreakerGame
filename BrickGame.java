@@ -13,9 +13,48 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
     private int delay = 8;
     private int playerX = 310;
     private Generator map;
-    private Generator temp;
     private ArrayList<Ball> ballList = new ArrayList<>();
     private boolean win = false;
+
+    public boolean getPlay() {
+        return this.play;
+    }
+    public void setPlay(boolean play){
+        this.play = play;
+    }
+    public Generator getMap() {
+        return this.map;
+    }
+    public void setMap(Generator map) {
+        this.map = map;
+    }
+    public int getTotalBricks() {
+        return this.totalBricks;
+    }
+    public void setTotalBricks(int totalBricks) {
+        this.totalBricks = totalBricks;
+    }
+    public Timer getTimer() {
+        return this.timer;
+    }
+    public void setTimer(Timer timer) {
+        this.timer = timer;
+    }
+    public int getDelay() {
+        return this.delay;
+    }
+    public void setDelay(int delay) {
+        this.delay = delay;
+    }
+    public int getPlayerX() {
+        return this.playerX;
+    }
+    public void setPlayerX(int playerX) {
+        this.playerX = playerX;
+    }
+    public ArrayList<Ball> getBallList() {
+        return this.ballList;
+    }
 
     /**
      * Constructor
