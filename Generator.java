@@ -6,7 +6,13 @@ public class Generator {
     public double[][] map;
     public int brickWidth;
     public int brickHeight;
-    public static ArrayList<Brick> brickArray = new ArrayList<Brick>();
+    public ArrayList<Brick> brickArray = new ArrayList<Brick>();
+
+    /**
+     * Constructor
+     * @param row number of rows
+     * @param col number of columns
+     */
     public Generator(int row, int col){
         map = new double[row][col];
         for(double[] mmap : map){
@@ -19,10 +25,10 @@ public class Generator {
         for(int i = 0; i < row * col; i++) {
             brickArray.add(new Brick());
         }
-    }
 
-    public Generator() {
-
+        Random rand = new Random();
+        int t = rand.nextInt(200);
+        brickArray.get(t).setColor(Color.ORANGE);
     }
 
     /**
@@ -44,6 +50,9 @@ public class Generator {
         }
     }
 
+    /**
+     * allows the user to clear the bricks from the map
+     */
     public void clearMap() {
         for(int i = 0; i < map.length; i++) {
             for(int j = 0; j < map[0].length; j++) {
@@ -52,18 +61,6 @@ public class Generator {
         }
     }
 
-    public void randomBricks() {
-        Random rand = new Random();
-        for(Brick b : brickArray) {
-            int num = rand.nextInt(101);
-            if(num < 90)
-                b.setColor(Color.WHITE);
-            else if(num < 95)
-                b.setColor(Color.MAGENTA);
-            else
-                b.setColor(Color.BLUE);
-        }
-    }
 
     /**
      * used to delete bricks
