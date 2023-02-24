@@ -1,7 +1,11 @@
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class BrickGame extends JPanel implements KeyListener, ActionListener, MouseMotionListener {
@@ -114,19 +118,19 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
         // Win condition
         if(totalBricks == 0) {
             win = true;
-            map.randomBricks(); // Reassigns the colors of the bricks in the map.
             play = false; // Stops the game from running without further user interaction.
-            for(int i = 0; i < ballList.size(); i++) { // Removes all the balls from the ballList to make sure that the game starts with only one ball
-                ballList.remove(i);
-            }
-            g.setColor(Color.red); // sets color to red and draws the win message
-            g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("YOU WIN",220,300);
-            g.drawString("Press Enter to Restart", 190, 340);
+            ballList.clear();
+            ballList.add(new Ball());
+            map = new Generator(10,20);
+            totalBricks = 200;
+            play = true;
+//            g.setColor(Color.red); // sets color to red and draws the win message
+//            g.setFont(new Font("serif", Font.BOLD, 30));
+//            g.drawString("YOU WIN",220,300);
+//            g.drawString("Press Enter to Restart", 190, 340);
 
         }
         if (ballList.isEmpty() && totalBricks != 0) { // Lose condition
-            map.randomBricks(); // Reassigns the colors of the bricks in the map.
             play = false; // Stops the game from running without further user interaction.
             map.clearMap(); // Clears the map, so that the user can see the lose condition message completely.
             g.setColor(Color.RED); // displays lose condition message.
@@ -185,18 +189,28 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                                     ball.setYDir(-1 * (ball.getYDir()));
                                 }
                                 // Checking the color of the brick to see if there is a power up to be applied
-                                if(Generator.brickArray.get(i * 20 + j).getColor() == Color.MAGENTA) { // If the brick is Magenta color
+                                if(map.brickArray.get(i * 20 + j).getColor() == Color.MAGENTA) { // If the brick is Magenta color
                                     ballList.add(new Ball(-1*ball.getXDir(), ball.getYDir(), ball.getPosX(), ball.getPosY())); // Creates a new ball, but makes it move the opposite direction.
                                     if(ball.getXDir() == 0) { // if the ball is not moving in a direction across the x-axis.
                                         ballList.get(ballList.size() - 1).setXDir(-1); // Sets the newest ball's x-axis direction to -1 if the parent's x-axis direction is 0
                                     }
                                 }
                                 // If the color is blue, three balls are added going three different directions from where the users paddle is.
-                                else if(Generator.brickArray.get(i * 20 + j).getColor() == Color.BLUE) { // Checks to see if the brick is blue color
+                                else if(map.brickArray.get(i * 20 + j).getColor() == Color.BLUE) { // Checks to see if the brick is blue color
                                     // Shoots three new balls out of the paddle.
                                     ballList.add(new Ball(-1, -2, playerX + 50, 520));
                                     ballList.add(new Ball(0, -2, playerX + 50, 520));
                                     ballList.add(new Ball(1, -2, playerX + 50, 520));
+                                }
+                                else if(map.brickArray.get(i*20+j).getColor() == Color.ORANGE) {
+                                    int temp = ballList.size();
+                                    for(int x = 0; x < temp; x++) {
+                                        Ball ball1 = ballList.get(x);
+                                        Ball b1 = new Ball(ball1.getXDir() -1, ball1.getYDir() * -1, ball1.getPosX(), ball1.getPosY());
+                                        Ball b2 = new Ball(ball1.getXDir() + 1, ball1.getYDir(), ball1.getPosX(), ball1.getPosY());
+                                        ballList.add(b1);
+                                        ballList.add(b2);
+                                    }
                                 }
                                 break A;
                             }
