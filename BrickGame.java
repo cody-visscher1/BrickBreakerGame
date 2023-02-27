@@ -120,14 +120,10 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             win = true;
             play = false; // Stops the game from running without further user interaction.
             ballList.clear();
-            ballList.add(new Ball());
-            map = new Generator(10,20);
-            totalBricks = 200;
-            play = true;
-//            g.setColor(Color.red); // sets color to red and draws the win message
-//            g.setFont(new Font("serif", Font.BOLD, 30));
-//            g.drawString("YOU WIN",220,300);
-//            g.drawString("Press Enter to Restart", 190, 340);
+            g.setColor(Color.red); // sets color to red and draws the win message
+            g.setFont(new Font("serif", Font.BOLD, 30));
+            g.drawString("YOU WIN",220,300);
+            g.drawString("Press Enter to Restart", 190, 340);
 
         }
         if (ballList.isEmpty() && totalBricks != 0) { // Lose condition
@@ -170,10 +166,10 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             for(int i = 0; i < map.map.length; i++) {
                 for(int j = 0; j < map.map[0].length; j++){
                     if(map.map[i][j]>0){
-                        int brickX = j*map.brickWidth + 80;
-                        int brickY = i*map.brickHeight+50;
-                        int brickWidth = map.brickWidth;
-                        int brickHeight = map.brickHeight;
+                        int brickX = j*Generator.brickWidth + 80;
+                        int brickY = i*Generator.brickHeight+50;
+                        int brickWidth = Generator.brickWidth;
+                        int brickHeight = Generator.brickHeight;
 
                         // Checks to see if the ball intersects with a brick, and if it does, removes the brick.
                         for(Ball ball : ballList) {
@@ -279,6 +275,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                 playerX = 310; // resets player position
                 totalBricks = 200; // resets the number of bricks
                 map = new Generator(10, 20); // creates a new map (replaces bricks that were gone)
+                play = true;
                 repaint(); // paints the new game
             }
         }
