@@ -14,8 +14,8 @@ public class Ball {
      */
     public Ball () {
         color = Color.GREEN;
-        height = 11;
-        width = 11;
+        height = Generator.brickHeight - 5;
+        width = Generator.brickWidth - 5;
         yDir = -2;
         xDir = 1;
         posY = 350;
@@ -31,8 +31,8 @@ public class Ball {
      */
     public Ball(double xDir, double yDir, double posX, double posY) {
         color = Color.GREEN;
-        height = 11;
-        width = 11;
+        height = Generator.brickWidth - 5;
+        width = Generator.brickWidth - 5;
         this.yDir = yDir;
         this.xDir = xDir;
         this.posX = posX;
