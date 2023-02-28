@@ -1,13 +1,13 @@
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import javax.swing.*;
 
+/**
+ * @author codyv, jacobshoe, brownky
+ * @version 1.0.0
+ */
 public class BrickGame extends JPanel implements KeyListener, ActionListener, MouseMotionListener {
 
     private boolean play = false;
@@ -19,46 +19,6 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
     private Generator map;
     private ArrayList<Ball> ballList = new ArrayList<>();
     private boolean win = false;
-
-    public boolean getPlay() {
-        return this.play;
-    }
-    public void setPlay(boolean play){
-        this.play = play;
-    }
-    public Generator getMap() {
-        return this.map;
-    }
-    public void setMap(Generator map) {
-        this.map = map;
-    }
-    public int getTotalBricks() {
-        return this.totalBricks;
-    }
-    public void setTotalBricks(int totalBricks) {
-        this.totalBricks = totalBricks;
-    }
-    public Timer getTimer() {
-        return this.timer;
-    }
-    public void setTimer(Timer timer) {
-        this.timer = timer;
-    }
-    public int getDelay() {
-        return this.delay;
-    }
-    public void setDelay(int delay) {
-        this.delay = delay;
-    }
-    public int getPlayerX() {
-        return this.playerX;
-    }
-    public void setPlayerX(int playerX) {
-        this.playerX = playerX;
-    }
-    public ArrayList<Ball> getBallList() {
-        return this.ballList;
-    }
 
     /**
      * Constructor
@@ -120,6 +80,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             win = true;
             play = false; // Stops the game from running without further user interaction.
             ballList.clear();
+            map = new Generator(10, 20);
             g.setColor(Color.red); // sets color to red and draws the win message
             g.setFont(new Font("serif", Font.BOLD, 30));
             g.drawString("YOU WIN",220,300);
@@ -328,5 +289,57 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             play = true;
             playerX = e.getX();
         }
+    }
+
+    public boolean getPlay() {
+        return this.play;
+    }
+
+    public void setPlay(boolean play){
+        this.play = play;
+    }
+
+    public Generator getMap() {
+        return this.map;
+    }
+
+    public void setMap(Generator map) {
+        this.map = map;
+    }
+
+    public int getTotalBricks() {
+        return this.totalBricks;
+    }
+
+    public void setTotalBricks(int totalBricks) {
+        this.totalBricks = totalBricks;
+    }
+
+    public Timer getTimer() {
+        return this.timer;
+    }
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
+    }
+
+    public int getDelay() {
+        return this.delay;
+    }
+
+    public void setDelay(int delay) {
+        this.delay = delay;
+    }
+
+    public int getPlayerX() {
+        return this.playerX;
+    }
+
+    public void setPlayerX(int playerX) {
+        this.playerX = playerX;
+    }
+
+    public ArrayList<Ball> getBallList() {
+        return this.ballList;
     }
 }
