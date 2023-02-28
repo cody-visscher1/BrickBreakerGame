@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class Generator {
     public double[][] map;
-    public int brickWidth;
-    public int brickHeight;
+    public static int brickWidth;
+    public static int brickHeight;
     public ArrayList<Brick> brickArray = new ArrayList<Brick>();
 
     /**
