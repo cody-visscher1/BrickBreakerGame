@@ -1,15 +1,28 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionListener;
+
+import java.awt.Cursor;
+import java.awt.Toolkit;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
+import javax.swing.WindowConstants;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 
 /**
- *
+ * Holds the main method for the user
+ * to run the program.
  */
 public class Driver {
-    public static void main(String[] args){
+
+    /**
+     * Allows the user to play the game.
+     *
+     * @param args - any command line arguments
+     *             that should be used for the
+     *             operation of the program.
+     */
+    public static void main(final String[] args){
         JFrame frame = new JFrame();
         frame.setTitle("Selection Screen");
         BrickGame bg = new BrickGame();
