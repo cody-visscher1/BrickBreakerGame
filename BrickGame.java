@@ -1,27 +1,82 @@
-
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Rectangle;
+import java.awt.event.KeyListener;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
-/**
+/** Creates an object that allows the user to play a brick-breaker game.
+ *
  * @author codyv, jacobshoe, brownky
+ *
  * @version 1.0.0
  */
 public class BrickGame extends JPanel implements KeyListener, ActionListener, MouseMotionListener {
 
+    /**
+     * The boolean that determines whether the game is currently
+     * being played or not.
+     */
     private boolean play = false;
+
+    /**
+     * The player's current score.
+     */
     private int score = 0;
+
+    /**
+     * The number of bricks that can be hit before
+     * the win condition is invoked.
+     */
     private int totalBricks = 200;
+
+    /**
+     * The timer that is being used to update
+     * the objects on the screen.
+     */
     private Timer timer;
+
+    /**
+     * The delay of the timer.
+     */
     private int delay = 8;
+
+    /**
+     * The paddle's current x-axis position.
+     */
     private int playerX = 310;
+
+    /**
+     * The object that stores the bricks
+     * and their locations.
+     */
     private Generator map;
+
+    /**
+     * The object that stores all the ball's
+     * that have been produced as a result of
+     * power-ups.
+     */
     private ArrayList<Ball> ballList = new ArrayList<>();
+
+    /**
+     * Used to determine if the player's score
+     * should continue to increase, or if it
+     * should be reset to zero.
+     */
     private boolean win = false;
 
     /**
-     * Constructor
+     * Creates an object of the BrickGame class in order to have
+     * an executable brick-breaker game.
      */
     public BrickGame() {
         map = new Generator(10,20);
@@ -35,12 +90,15 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
     }
 
     /**
-     * Shows all the objects that are in the frame
+     * Shows all the objects that are in the frame,
+     * also used to check win and lose conditions.
      *
-     * Also checks win and lose conditions
-     * @param g the graphics tool that is being used
+     * @param b - Graphics component used to draw
+     *          all the game's objects to the user's
+     *          screen.
      */
-    public void paint(Graphics g){
+    public void paint(final Graphics b){
+        Graphics g = b;
         // Sets the color you are using to draw an object to black
         g.setColor(Color.BLACK);
         // Creates a rectangle and paints it black
@@ -98,6 +156,11 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
         g.dispose();
     }
 
+    /**
+     * Executed by the actionPerformed method, checks to
+     * see if any of the ball objects are intersecting
+     * with the player's paddle.
+     */
     private void checkPlayerBallIntersection() {
         for(Ball ball : ballList) {
             if (new Rectangle((int) (ball.getPosX() + ball.getWidth() / 2), (int) ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX, 550, 100, 8))) {
@@ -107,14 +170,19 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                 // Adjusts the  x-axis direction of the ball
                 if (Math.abs(adjustment) < 3.01) { // Checks to ensure the ball does not begin to move too quickly along the x-axis.
                     ball.setXDir(-1 * adjustment);
-                }
-                else {
+                } else {
                     ball.setXDir(-3 * ball.getXDir());
                 }
             }
         }
     }
 
+    /**
+     * Executed by the actionPerformed method, checks to
+     * see if any of the ball objects in the ballList are
+     * currently intersecting with any of the bricks on
+     * screen.
+     */
     private void checkBrickBallIntersection() {
         A:
         for(int i = 0; i < map.map.length; i++) {
@@ -144,15 +212,13 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                                 if(ball.getXDir() == 0) { // if the ball is not moving in a direction across the x-axis.
                                     ballList.get(ballList.size() - 1).setXDir(-1); // Sets the newest ball's x-axis direction to -1 if the parent's x-axis direction is 0
                                 }
-                            }
-                            // If the color is blue, three balls are added going three different directions from where the users paddle is.
-                            else if(map.brickArray.get(i * 20 + j).getColor() == Color.BLUE) { // Checks to see if the brick is blue color
+                                // If the color is blue, three balls are added going three different directions from where the users paddle is.
+                            } else if(map.brickArray.get(i * 20 + j).getColor() == Color.BLUE) { // Checks to see if the brick is blue color
                                 // Shoots three new balls out of the paddle.
                                 ballList.add(new Ball(-1, -2, playerX + 50, 520));
                                 ballList.add(new Ball(0, -2, playerX + 50, 520));
                                 ballList.add(new Ball(1, -2, playerX + 50, 520));
-                            }
-                            else if(map.brickArray.get(i*20+j).getColor() == Color.ORANGE) {
+                            } else if(map.brickArray.get(i*20+j).getColor() == Color.ORANGE) {
                                 int temp = ballList.size();
                                 for(int x = 0; x < temp; x++) {
                                     Ball ball1 = ballList.get(x);
@@ -170,6 +236,10 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
         }
     }
 
+    /**
+     * Increments the value of the ball's position
+     * by the balls direction.
+     */
     private void changeBallDirection() {
         for(Ball ball : ballList) {
             ball.setPosX(ball.getPosX() + ball.getXDir()); // adjusts the direction of the ball by incrementing the direction
@@ -188,11 +258,15 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
     }
 
     /**
-     * Checks for intersections between balls and bricks, as well as intersections between balls and the paddle
-     * @param e event that happens
+     * Uses all the private methods above to see if there are
+     * any intersections, as well as incrementing the positions
+     * of the balls stored in ballList.
+     *
+     * @param e - any even that is performed by the user within
+     *          the frame or by the user pressing the keyboard.
      */
     @Override
-    public void actionPerformed(ActionEvent e){
+    public void actionPerformed(final ActionEvent e){
         timer.start();
         if(play) {
             // Checking for intersections between the balls and the player's paddle.
@@ -205,30 +279,34 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
         repaint();
     }
 
+    /**
+     * unused method.
+     *
+     * @param e the event to be processed.
+     */
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(final KeyEvent e) {
 
     }
 
     /**
-     * Checks to see if the user presses a key
-     * @param e the user pressing a key
+     * Checks to see if the user presses a key.
+     *
+     * @param e the user pressing a key.
      */
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(final KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_RIGHT) { // if the key pressed is the right-arrow key
             if(playerX >= 600) { // doesn't allow the user to go off the screen
                 playerX = 600;
-            }
-            else {
+            } else {
                 moveRight(); // adjusts the paddle position
             }
         }
         if(e.getKeyCode() == KeyEvent.VK_LEFT) { // if the key pressed is the left-arrow key
             if(playerX < 0) {
                 playerX = 0;
-            }
-            else {
+            } else {
                 moveLeft(); // adjusts the paddle position
             }
         }
@@ -253,13 +331,18 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
         }
     }
 
+    /**
+     * unused method.
+     *
+     * @param e the event to be processed.
+     */
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(final KeyEvent e) {
 
     }
 
     /**
-     * Moves the paddle to the right 20 pixels
+     * Moves the paddle to the right 20 pixels.
      */
     public void moveRight(){
         play = true;
@@ -267,85 +350,183 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
     }
 
     /**
-     * Moves the paddle to the left 20 pixels
+     * Moves the paddle to the left 20 pixels.
      */
     public void moveLeft(){
         play = true;
         playerX-=20;
     }
 
+    /**
+     * unused method.
+     *
+     * @param e the event to be processed.
+     */
     @Override
-    public void mouseDragged(MouseEvent e) {
+    public void mouseDragged(final MouseEvent e) {
 
     }
 
     /**
      * Checks to see if the mouse moved within the frame, and then updates the location of the paddle.
-     * @param e the mouse moving within the frame
+     *
+     * @param e the mouse moving within the frame.
      */
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseMoved(final MouseEvent e) {
         // The iff statements just ensure that the user paddle cannot leave the screen.
         if(playerX >= 580) {
             playerX = 580;
         }
         if(playerX < 1) {
             playerX = 1;
-        }
-        else {
+        } else {
             play = true;
             playerX = e.getX();
         }
     }
 
+    /**
+     * Returns the boolean that determines if the game is
+     * currently in motion.
+     *
+     * @return true or false determined by the current
+     * state of the game.
+     */
     public boolean getPlay() {
         return this.play;
     }
 
-    public void setPlay(boolean play){
+    /**
+     * Allows the user to set the boolean play to help
+     * with testing.
+     *
+     * @param play - the boolean, true or false, that
+     *             is going to be cast to the instance
+     *             variable, play.
+     */
+    public void setPlay(final boolean play){
         this.play = play;
     }
 
+    /**
+     * Returns the Generator, map, that the stores the
+     * bricks.
+     *
+     * @return the Generator object stored by the instance
+     * variable map.
+     */
     public Generator getMap() {
         return this.map;
     }
 
-    public void setMap(Generator map) {
+    /**
+     * Allows the user to change the object that
+     * determines the position of bricks in the GUI.
+     *
+     * @param map - the Generator object that is going
+     *            to be set to the instance variable
+     *            map.
+     */
+    public void setMap(final Generator map) {
         this.map = map;
     }
 
+    /**
+     * Gives the user the amount of bricks left on the
+     * screen for testing.
+     *
+     * @return the amount of bricks left on the screen.
+     */
     public int getTotalBricks() {
         return this.totalBricks;
     }
 
-    public void setTotalBricks(int totalBricks) {
+    /**
+     * Allows the user to change the amount of collisions
+     * possible before the win condition is invoked.
+     *
+     * @param totalBricks - the amount of ball and brick
+     *                    collisions possible before the
+     *                    win condition is invoked.
+     */
+    public void setTotalBricks(final int totalBricks) {
         this.totalBricks = totalBricks;
     }
 
+    /**
+     * Gives the user the timer that is being used to
+     * update the objects shown on the user's screen.
+     *
+     * @return the timer that is being used to update
+     * the game.
+     */
     public Timer getTimer() {
         return this.timer;
     }
 
-    public void setTimer(Timer timer) {
+    /**
+     * Allows the user to change the Timer used to
+     * update the objects shown on the user's screen.
+     *
+     * @param timer - the Timer that is being
+     *              assigned to the instance variable
+     *              timer.
+     */
+    public void setTimer(final Timer timer) {
         this.timer = timer;
     }
 
+    /**
+     * Gives the user the delay that the timer uses
+     * between updating the screen.
+     *
+     * @return the amount of time before the Timer updates
+     * the user's screen again.
+     */
     public int getDelay() {
         return this.delay;
     }
 
-    public void setDelay(int delay) {
+    /**
+     * Allows the user to change the delay that the
+     * timer uses between updating the screen.
+     *
+     * @param delay - the amount of time between
+     *              updates of the object's shown
+     *              on the user's screen.
+     */
+    public void setDelay(final int delay) {
         this.delay = delay;
     }
 
+    /**
+     * Gives the user the x-axis position of the
+     * current player's paddle.
+     *
+     * @return the x-axis position of the player's paddle.
+     */
     public int getPlayerX() {
         return this.playerX;
     }
 
-    public void setPlayerX(int playerX) {
+    /**
+     * Allows the user to change the x-axis position
+     * of the player's paddle on screen.
+     *
+     * @param playerX - value that the player's
+     *                x-axis position will be updated to.
+     */
+    public void setPlayerX(final int playerX) {
         this.playerX = playerX;
     }
 
+    /**
+     * Allows the user to retrieve the information stored
+     * in the ballList.
+     *
+     * @return the list that stores all the balls from the game.
+     */
     public ArrayList<Ball> getBallList() {
         return this.ballList;
     }
