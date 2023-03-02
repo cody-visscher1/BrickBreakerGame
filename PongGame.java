@@ -1,22 +1,79 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 
+import java.awt.Rectangle;
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.KeyListener;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+/**
+ * A class that allows users to play a pong game.
+ */
 public class PongGame extends JPanel implements KeyListener, ActionListener, MouseMotionListener {
+
+    /**
+     * The boolean that determines whether the game is currently being played or not.
+     */
     private boolean play = false;
+
+    /**
+     * The timer that updates the objects on the user's screen.
+     */
     private Timer timer;
+
+    /**
+     * The delay of the timer.
+     */
     private int delay = 8;
+
+    /**
+     * The x-axis position of the player's paddle.
+     */
     private int playerX = 310;
+
+    /**
+     * The x-axis position of the computer's paddle.
+     */
     private double compX = 310;
+
+    /**
+     * The Rectangle that stores the position of the computer's goal.
+     */
     private Rectangle compGoal;
+
+    /**
+     * The Rectangle that stores the position of the player's goal.
+     */
     private Rectangle playerGoal;
+
+    /**
+     * The player's score.
+     */
     private int playerScore;
+
+    /**
+     * The computer's score.
+     */
     private int compScore;
+
+    /**
+     * The difficulty of the game.
+     */
     private double difficulty;
+
+    /**
+     * The ball that is being used in the game.
+     */
     private Ball ball;
 
     /**
-     * Base Constructor
+     * Base Constructor for pong game.
      */
     public PongGame() {
         ball = new Ball(20,20);
@@ -37,19 +94,9 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
     }
 
     /**
-     * Constructor that allows the user to select the difficulty
-     *
-     * This should be implemented later, but is not ready yet with driver.
-     * @param difficulty the amount that the paddle moves per iteration
-     */
-    public PongGame(double difficulty) {
-        super();
-        this.difficulty = difficulty;
-    }
-
-    /**
      * Paints the panel for every iteration.
-     * @param g the graphics that are being used to paint the panel
+     *
+     * @param g the graphics that are being used to paint the panel.
      */
     public void paint(Graphics g) {
         // Painting the background of the panel
@@ -68,9 +115,9 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
         //Adding ball
         g.setColor(ball.getColor());
         g.fillOval((int) ball.getPosX(), (int) ball.getPosY(), ball.getWidth(), ball.getHeight());
-        if(ball.getPosX() - 50 > compX) // adjusting the position of the computer paddle to make sure that it is always moving in the right direction.
+        if(ball.getPosX() - 50 > compX) { // adjusting the position of the computer paddle to make sure that it is always moving in the right direction.
             compX += difficulty;
-        else if(ball.getPosX() -50 < compX) {
+        } else if(ball.getPosX() -50 < compX) {
             compX -= difficulty;
         }
         // Player win condition
@@ -100,10 +147,11 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
     /**
      * Checks for intersections between the ball and anything other object on the panel,
      * as well as intersections between the ball and the edges of the panel.
+     *
      * @param e an event that occurs.
      */
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(final ActionEvent e) {
         timer.start();
         if(play) {
             // Checking to see if the ball intersects with the player's paddle
@@ -171,25 +219,50 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
     }
 
     /**
+     * unused method.
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void keyTyped(final KeyEvent e) {
+
+    }
+
+    /**
+     * adjusts the user's paddle to the right.
+     */
+    public void moveRight() {
+        play = true;
+        playerX += 20;
+    }
+
+    /**
+     * adjusts the user's paddle to the left.
+     */
+    public void moveLeft() {
+        play = true;
+        playerX -= 20;
+    }
+
+    /**
      * Checks to see if a key is typed, and then updates the game
      * to respond correctly.
+     *
      * @param e a key being typed by the user.
      */
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyPressed(final KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_RIGHT) { // If the key pressed is the right-arrow key
             if(playerX >= 600) { // Makes sure that the player cannot move the paddle out of the panel
                 playerX = 600;
-            }
-            else {
+            } else {
                 moveRight(); // adjusts the position of the paddle by 20
             }
         }
         if(e.getKeyCode() == KeyEvent.VK_LEFT) { // If the key pressed is the left-arrow key
             if(playerX < 1) { // same as above comments
                 playerX = 1;
-            }
-            else moveLeft();
+            } else {moveLeft();}
         }
 
         if(e.getKeyCode() == KeyEvent.VK_ENTER) { // If the key pressed is the enter key
@@ -205,74 +278,265 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
     }
 
     /**
-     * adjusts the user's paddle to the right
+     * unused method.
+     *
+     * @param e the event to be processed.
      */
-    public void moveRight() {
-        play = true;
-        playerX += 20;
+    @Override
+    public void keyReleased(final KeyEvent e) {
+
     }
 
     /**
-     * adjusts the user's paddle to the left
+     * unused method.
+     *
+     * @param e the event to be processed.
      */
-    public void moveLeft() {
-        play = true;
-        playerX -= 20;
-    }
-
-
     @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
+    public void mouseDragged(final MouseEvent e) {
 
     }
 
     /**
      * Checks for mouse movement, and then adjusts the players paddle
      * to follow the x-axis position of the mouse.
+     *
      * @param e the mouse moving on the panel.
      */
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseMoved(final MouseEvent e) {
         if(playerX >= 580) {
             playerX = 580;
-        }
-        else {
+        } else {
             play = true;
             playerX = e.getX()-50;
         }
         if(playerX < 0) {
             playerX = 0;
-        }
-        else {
+        } else {
             play = true;
             playerX = e.getX()-50;
         }
     }
 
-    // Getter and setters, that are unused.
+    /**
+     * Allows the user to retrieve the player's
+     * score.
+     *
+     * @return the value stored in the instance
+     * variable player score.
+     */
     public int getPlayerScore() {
         return playerScore;
     }
 
-    public void setPlayerScore(int playerScore) {
+    /**
+     * Allows the user to set the player's score.
+     *
+     * @param playerScore - the value that the
+     *                    instance variable
+     *                    playerScore will be set to.
+     */
+    public void setPlayerScore(final int playerScore) {
         this.playerScore = playerScore;
     }
 
+    /**
+     * Allows the user to retrieve the computer's score.
+     *
+     * @return the value stored in the instance variable
+     * compScore.
+     */
     public int getCompScore() {
         return compScore;
     }
 
-    public void setCompScore(int compScore) {
+    /**
+     * Allows the user to set the computer's score.
+     *
+     * @param compScore - the value that the instance
+     *                  variable compScore will be set
+     *                  to.
+     */
+    public void setCompScore(final int compScore) {
         this.compScore = compScore;
+    }
+
+    /**
+     * Allows the user to access the boolean play in other methods.
+     *
+     * @return the value stored by the instance variable play.
+     */
+    public boolean getPlay() {
+        return this.play;
+    }
+
+    /**
+     * Allows the user to set the boolean play in other methods.
+     *
+     * @param play - the true or false value that play should be set to.
+     */
+    public void setPlay(final boolean play) {
+        this.play = play;
+    }
+
+    /**
+     * Allows the user to access the Timer that is being used to update
+     * the GUI from other methods.
+     *
+     * @return the Timer that is being used to update the GUI.
+     */
+    public Timer getTimer() {
+        return this.timer;
+    }
+
+    /**
+     * Allows the user to set the Timer in other methods.
+     *
+     * @param timer - the timer that the instance variable timer is being
+     *              set to.
+     */
+    public void setTimer(final Timer timer) {
+        this.timer = timer;
+    }
+
+    /**
+     * Allows the user to access the delay of the timer that is being used
+     * in the Timer.
+     *
+     * @return the delay of the timer.
+     */
+    public int getDelay() {
+        return this.delay;
+    }
+
+    /**
+     * Allows the user to set the delay of the timer from other methods.
+     *
+     * @param delay - the value that the user wants to set the delay of the
+     *              timer to.
+     */
+    public void setDelay(final int delay) {
+        this.delay = delay;
+    }
+
+    /**
+     * Allows the user to access the x-axis position of the player's paddle.
+     *
+     * @return the x-axis position of the player's paddle.
+     */
+    public int getPlayerX() {
+        return this.playerX;
+    }
+
+    /**
+     * Allows the user to set the x-axis position of the player's paddle.
+     *
+     * @param playerX - the value that the user wants to set the player's
+     *                x-axis position.
+     */
+    public void setPlayerX(final int playerX) {
+        this.playerX = playerX;
+    }
+
+    /**
+     * Allows the user to access the x-axis position of the computer's paddle.
+     *
+     * @return the x-axis position of the computer's paddle.
+     */
+    public double getCompX() {
+        return this.compX;
+    }
+
+    /**
+     * Allows the user to set the x-axis position of the computer's paddle.
+     *
+     * @param compX - the value that the user wants to set the computer's
+     *              x-axis position.
+     */
+    public void setCompX(final double compX) {
+        this.compX = compX;
+    }
+
+    /**
+     * Allows the user to access the variable that stores the Rectangle
+     * that is being used to store the coordinates of the computer's goal.
+     *
+     * @return the coordinates of the computer's goal.
+     */
+    public Rectangle getCompGoal() {
+        return this.compGoal;
+    }
+
+    /**
+     * Allows the user to set the variable that stores the Rectangle
+     * that is being used to store the coordinates of the computer's goal.
+     *
+     * @param compGoal - the Rectangle that the user wants to set the computer's
+     *                 goal to.
+     */
+    public void setCompGoal(final Rectangle compGoal) {
+        this.compGoal = compGoal;
+    }
+
+    /**
+     * Allows the user to access the Rectangle variable that stores the
+     * coordinates of the player's goal.
+     *
+     * @return the Rectangle holding the coordinates of the player's goal.
+     */
+    public Rectangle getPlayerGoal() {
+        return this.playerGoal;
+    }
+
+    /**
+     * Allows the user to change the coordinates of the player's goal.
+     *
+     * @param playerGoal - the Rectangle that the user wants the player's
+     *                   goal to be set to.
+     */
+    public void setPlayerGoal(final Rectangle playerGoal) {
+        this.playerGoal = playerGoal;
+    }
+
+    /**
+     * Allows the user to access the variable that stores the difficulty,
+     * which updates how much the computer's paddle increments by each
+     * iteration.
+     *
+     * @return the difficulty of the game.
+     */
+    public double getDifficulty() {
+        return this.difficulty;
+    }
+
+    /**
+     * Allows the user to set the variable that stores the difficulty of the game.
+     *
+     * @param difficulty - the amount that the user wants the computer's paddle
+     *                   to increment by during each iteration.
+     */
+    public void setDifficulty(final double difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    /**
+     * Allows the user to access the object that stores the ball being used to play
+     * the game.
+     *
+     * @return the ball that is being used to play the game.
+     */
+    public Ball getBall() {
+        return this.ball;
+    }
+
+    /**
+     * Allows the user to set the object that stores the ball being used to play
+     * the game.
+     *
+     * @param ball - the Ball that the object should be set to.
+     */
+    public void setBall(final Ball ball) {
+        this.ball = ball;
     }
 }
