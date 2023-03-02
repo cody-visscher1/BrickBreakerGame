@@ -185,13 +185,13 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      */
     private void checkBrickBallIntersection() {
         A:
-        for(int i = 0; i < map.map.length; i++) {
-            for(int j = 0; j < map.map[0].length; j++){
-                if(map.map[i][j]>0){
-                    int brickX = j*Generator.brickWidth + 80;
-                    int brickY = i*Generator.brickHeight+50;
-                    int brickWidth = Generator.brickWidth;
-                    int brickHeight = Generator.brickHeight;
+        for(int i = 0; i < map.getMap().length; i++) {
+            for(int j = 0; j < map.getMap()[0].length; j++){
+                if(map.getMap()[i][j]>0){
+                    int brickX = j*Generator.getBrickWidth() + 80;
+                    int brickY = i*Generator.getBrickHeight()+50;
+                    int brickWidth = Generator.getBrickWidth();
+                    int brickHeight = Generator.getBrickHeight();
 
                     // Checks to see if the ball intersects with a brick, and if it does, removes the brick.
                     for(Ball ball : ballList) {
@@ -207,18 +207,18 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                                 ball.setYDir(-1 * (ball.getYDir()));
                             }
                             // Checking the color of the brick to see if there is a power up to be applied
-                            if(map.brickArray.get(i * 20 + j).getColor() == Color.MAGENTA) { // If the brick is Magenta color
+                            if(map.getBrickArray().get(i * 20 + j).getColor() == Color.MAGENTA) { // If the brick is Magenta color
                                 ballList.add(new Ball(-1*ball.getXDir(), ball.getYDir(), ball.getPosX(), ball.getPosY())); // Creates a new ball, but makes it move the opposite direction.
                                 if(ball.getXDir() == 0) { // if the ball is not moving in a direction across the x-axis.
                                     ballList.get(ballList.size() - 1).setXDir(-1); // Sets the newest ball's x-axis direction to -1 if the parent's x-axis direction is 0
                                 }
                                 // If the color is blue, three balls are added going three different directions from where the users paddle is.
-                            } else if(map.brickArray.get(i * 20 + j).getColor() == Color.BLUE) { // Checks to see if the brick is blue color
+                            } else if(map.getBrickArray().get(i * 20 + j).getColor() == Color.BLUE) { // Checks to see if the brick is blue color
                                 // Shoots three new balls out of the paddle.
                                 ballList.add(new Ball(-1, -2, playerX + 50, 520));
                                 ballList.add(new Ball(0, -2, playerX + 50, 520));
                                 ballList.add(new Ball(1, -2, playerX + 50, 520));
-                            } else if(map.brickArray.get(i*20+j).getColor() == Color.ORANGE) {
+                            } else if(map.getBrickArray().get(i*20+j).getColor() == Color.ORANGE) {
                                 int temp = ballList.size();
                                 for(int x = 0; x < temp; x++) {
                                     Ball ball1 = ballList.get(x);
