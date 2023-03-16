@@ -161,18 +161,16 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      * see if any of the ball objects are intersecting
      * with the player's paddle.
      */
-    private void checkPlayerBallIntersection() {
-        for(Ball ball : ballList) {
-            if (new Rectangle((int) (ball.getPosX() + ball.getWidth() / 2), (int) ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX, 550, 100, 8))) {
-                ball.setYDir(-1 * (ball.getYDir()));
-                double center = playerX + 50;
-                double adjustment = (center - ball.getPosX()) * 0.05;
-                // Adjusts the  x-axis direction of the ball
-                if (Math.abs(adjustment) < 3.01) { // Checks to ensure the ball does not begin to move too quickly along the x-axis.
-                    ball.setXDir(-1 * adjustment);
-                } else {
-                    ball.setXDir(-3 * ball.getXDir());
-                }
+    private void checkPlayerBallIntersection(Ball ball) {
+        if (new Rectangle((int) (ball.getPosX() + ball.getWidth() / 2), (int) ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX, 550, 100, 8))) {
+            ball.setYDir(-1 * (ball.getYDir()));
+            double center = playerX + 50;
+            double adjustment = (center - ball.getPosX()) * 0.05;
+            // Adjusts the  x-axis direction of the ball
+            if (Math.abs(adjustment) < 3.01) { // Checks to ensure the ball does not begin to move too quickly along the x-axis.
+                ball.setXDir(-1 * adjustment);
+            } else {
+                ball.setXDir(-3 * ball.getXDir());
             }
         }
     }
@@ -240,20 +238,18 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      * Increments the value of the ball's position
      * by the balls direction.
      */
-    private void changeBallDirection() {
-        for(Ball ball : ballList) {
-            ball.setPosX(ball.getPosX() + ball.getXDir()); // adjusts the direction of the ball by incrementing the direction
-            ball.setPosY(ball.getPosY() + ball.getYDir());
-            // Checks if the ball is at the edge of the panel, and changes the direction if it is
-            if (ball.getPosX() < 0) {
-                ball.setXDir(-1 * (ball.getXDir()));
-            }
-            if (ball.getPosY() < 0) {
-                ball.setYDir(-1 * (ball.getYDir()));
-            }
-            if (ball.getPosX() > 670) {
-                ball.setXDir(-1 * (ball.getXDir()));
-            }
+    private void updateBallLocation(Ball ball) {
+        ball.setPosX(ball.getPosX() + ball.getXDir()); // adjusts the direction of the ball by incrementing the direction
+        ball.setPosY(ball.getPosY() + ball.getYDir());
+        // Checks if the ball is at the edge of the panel, and changes the direction if it is
+        if (ball.getPosX() < 0) {
+            ball.setXDir(-1 * (ball.getXDir()));
+        }
+        if (ball.getPosY() < 0) {
+            ball.setYDir(-1 * (ball.getYDir()));
+        }
+        if (ball.getPosX() > 670) {
+            ball.setXDir(-1 * (ball.getXDir()));
         }
     }
 
@@ -270,13 +266,33 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
         timer.start();
         if(play) {
             // Checking for intersections between the balls and the player's paddle.
-            checkPlayerBallIntersection();
-            // Checking each brick for an intersection
-            checkBrickBallIntersection();
-            // Changes the direction of the ball
-            changeBallDirection();
+            for(Ball ball : ballList) {
+                checkPlayerBallIntersection(ball);
+                // Checking each brick for an intersection
+                checkBrickBallIntersection();
+                // Changes the direction of the ball
+                updateBallLocation(ball);
+            }
         }
         repaint();
+    }
+
+    public void testHelpBrickIntersection(Ball ball) {
+        ballList.clear();
+        ballList.add(ball);
+        checkBrickBallIntersection();
+    }
+
+    public void testHelpPaddleIntersection(Ball ball) {
+        ballList.clear();
+        ballList.add(ball);
+        checkPlayerBallIntersection(ball);
+    }
+
+    public void testHelpChangeDirection(Ball ball) {
+        ballList.clear();
+        ballList.add(ball);
+        updateBallLocation(ball);
     }
 
     /**
@@ -529,5 +545,13 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      */
     public ArrayList<Ball> getBallList() {
         return this.ballList;
+    }
+
+    public boolean getWin() {
+        return this.win;
+    }
+
+    public void setWin(boolean win) {
+        this.win = win;
     }
 }
