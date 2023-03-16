@@ -268,11 +268,10 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             // Checking for intersections between the balls and the player's paddle.
             for(Ball ball : ballList) {
                 checkPlayerBallIntersection(ball);
-                // Checking each brick for an intersection
-                checkBrickBallIntersection();
                 // Changes the direction of the ball
                 updateBallLocation(ball);
             }
+            checkBrickBallIntersection();
         }
         repaint();
     }
