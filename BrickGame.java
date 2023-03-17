@@ -140,8 +140,9 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             ballList.clear();
             g.setColor(Color.red); // sets color to red and draws the win message
             g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("YOU WIN",220,300);
-            g.drawString("Press Enter to Restart", 190, 340);
+            g.drawString("YOU WIN",220,260);
+            g.drawString("Press Enter to Restart", 190, 300);
+            g.drawString("Press ESC to return to menu", 180, 340);
 
         }
         if (ballList.isEmpty() && totalBricks != 0) { // Lose condition
@@ -149,9 +150,10 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             map.clearMap(); // Clears the map, so that the user can see the lose condition message completely.
             g.setColor(Color.RED); // displays lose condition message.
             g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("Game Over Score : " + score, 190, 300);
+            g.drawString("Game Over Score : " + score, 190, 260);
             g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("Press Enter to Restart", 190, 340);
+            g.drawString("Press Enter to Restart", 190, 300);
+            g.drawString("Press ESC to return to menu", 180, 340);
         }
         g.dispose();
     }
@@ -343,6 +345,11 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                 play = true;
                 repaint(); // paints the new game
             }
+        }
+
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            Driver.kill();
+            Driver.main(null);
         }
     }
 
