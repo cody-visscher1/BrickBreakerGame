@@ -14,6 +14,11 @@ import javax.swing.JPanel;
  * to run the program.
  */
 public class Driver {
+    private static JFrame frame;
+    private static BrickGame bg;
+    private static PongGame pg;
+    private static JPanel panel;
+
 
     /**
      * Allows the user to play the game.
@@ -23,11 +28,11 @@ public class Driver {
      *             operation of the program.
      */
     public static void main(final String[] args){
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setTitle("Selection Screen");
-        BrickGame bg = new BrickGame();
-        PongGame pg = new PongGame();
-        JPanel panel = new JPanel();
+        bg = new BrickGame();
+        pg = new PongGame();
+        panel = new JPanel();
         frame.setName("Selection Screen");
         frame.setBounds(100, 100, 350, 300);
         panel.setBounds(100, 100, 350, 300);
@@ -74,5 +79,14 @@ public class Driver {
            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
            frame.add(pg);
         });
+    }
+
+    /**
+     * Kills the current program.
+     */
+    public static void kill() {
+        bg = null;
+        pg = null;
+        frame.removeAll();
     }
 }
