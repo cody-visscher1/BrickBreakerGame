@@ -18,6 +18,11 @@ import javax.swing.Timer;
 public class PongGame extends JPanel implements KeyListener, ActionListener, MouseMotionListener {
 
     /**
+     * The boolean that determines if a player has scored.
+     */
+    private boolean scored = false;
+
+    /**
      * The boolean that determines whether the game is currently being played or not.
      */
     private boolean play = false;
@@ -122,6 +127,7 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
         }
         // Player win condition
         if(playerScore == 5) {
+            play = false;
             ball.setPosY(-30);
             ball.setXDir(0);
             ball.setYDir(0);
@@ -133,6 +139,7 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
 
         // Computer win condition
         if(compScore == 5) {
+            play = false;
             ball.setPosY(-30);
             ball.setXDir(0);
             ball.setYDir(0);
@@ -141,6 +148,14 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
             g.drawString("YOU LOSE",220,300);
             g.drawString("Press Enter to Restart", 190, 340);
         }
+
+        if (scored) {
+            play = false;
+            g.setColor(Color.white);
+            g.setFont(new Font("serif", Font.BOLD, 30));
+            g.drawString("Current Score: " + " USER: " + playerScore + " COMP: " + compScore, 150, 260);
+        }
+
         g.dispose();
     }
 
@@ -175,6 +190,7 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
                 ball.setPosY(500);
                 ball.setXDir(0); // The ball moves in a straight line, so that both players can have a chance to hit
                 ball.setYDir(-3);
+                scored = true;
             }
 
             // Checking to see if the ball intersects with the Player's goal
@@ -184,6 +200,7 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
                 ball.setPosY(50);
                 ball.setXDir(0);
                 ball.setYDir(3); // Sets the direction of the ball towards the player so they have a chance to hit first.
+                scored = true;
             }
 
             // Checking to see if the ball intersects with the AI's paddle
@@ -266,14 +283,27 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
         }
 
         if(e.getKeyCode() == KeyEvent.VK_ENTER) { // If the key pressed is the enter key
-            ball = new Ball(); // resets the ball
-            ball.setPosX(120);
-            ball.setPosY(350);
-            ball.setXDir(-1);
-            ball.setYDir(-2);
-            playerX = 310; // Resets the player and computer x positions
-            compX = 310;
-            repaint();
+            if(playerScore == 7 || compScore == 7) {
+                ball = new Ball(); // resets the ball
+                ball.setPosX(120);
+                ball.setPosY(350);
+                ball.setXDir(-1);
+                ball.setYDir(-2);
+                playerX = 310; // Resets the player and computer x positions
+                compX = 310;
+                repaint();
+            }
+            else return;
+        }
+
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            Driver.kill();
+            Driver.main(null);
+        }
+
+        else {
+            scored = false;
+            play = true;
         }
     }
 
@@ -538,5 +568,24 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
      */
     public void setBall(final Ball ball) {
         this.ball = ball;
+    }
+
+    /**
+     * Allows the user to access the scored variable from other methods.
+     *
+     * @return if a player has scored or not.
+     */
+    public boolean getScored() {
+        return this.scored;
+    }
+
+    /**
+     * Allows the user to set the boolean that stores if a player has scored
+     * or not.
+     *
+     * @param scored - the boolean that determines if a player has scored.
+     */
+    public void setScored(boolean scored) {
+        this.scored = scored;
     }
 }
