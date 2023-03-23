@@ -57,21 +57,6 @@ public class Ball {
     }
 
     /**
-     * Allows the user to construct a ball with a specific x-axis and y-axis position
-     *
-     * @param game - if the game is running
-     * @param posX - the x-axis position of the ball
-     * @param posY - the y-axis position of the ball
-     */
-    public Ball(final boolean game, final int posX, final int posY) {
-        super();
-        if(game) {
-            this.posX = posX;
-            this.posY = posY;
-        }
-    }
-
-    /**
      * Specified Constructor for balls.
      *
      * @param xDir the horizontal direction that the ball should move.
@@ -80,7 +65,9 @@ public class Ball {
      * @param posY the position of the ball on the y-axis.
      */
     public Ball(final double xDir, final double yDir, final double posX, final double posY) {
-        super();
+        color = Color.GREEN;
+        height = Generator.getBrickHeight() - 5;
+        width = Generator.getBrickWidth() - 5;
         this.yDir = yDir;
         this.xDir = xDir;
         this.posX = posX;
@@ -95,9 +82,13 @@ public class Ball {
      * @param width - the width of the ball.
      */
     public Ball(final int height, final int width) {
-        super();
         this.height = height;
         this.width = width;
+        color = Color.GREEN;
+        this.yDir = -2;
+        this.xDir = -1;
+        this.posX = 120;
+        this.posY = 350;
     }
 
     /**

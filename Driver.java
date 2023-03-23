@@ -14,11 +14,6 @@ import javax.swing.JPanel;
  * to run the program.
  */
 public class Driver {
-    private static JFrame frame;
-    private static BrickGame bg;
-    private static PongGame pg;
-    private static JPanel panel;
-
 
     /**
      * Allows the user to play the game.
@@ -28,11 +23,11 @@ public class Driver {
      *             operation of the program.
      */
     public static void main(final String[] args){
-        frame = new JFrame();
+        JFrame frame = new JFrame();
         frame.setTitle("Selection Screen");
-        bg = new BrickGame();
-        pg = new PongGame();
-        panel = new JPanel();
+        BrickGame bg = new BrickGame();
+        PongGame pg = new PongGame();
+        JPanel panel = new JPanel();
         frame.setName("Selection Screen");
         frame.setBounds(100, 100, 350, 300);
         panel.setBounds(100, 100, 350, 300);
@@ -65,28 +60,19 @@ public class Driver {
             frame.add(bg);
         });
         pongbutton.addActionListener(e -> {
-           frame.setVisible(false);
-           panel.setVisible(false);
+            frame.setVisible(false);
+            panel.setVisible(false);
 
-           BufferedImage cursorImg = new BufferedImage(16,16,BufferedImage.TYPE_INT_ARGB);
-           Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0,0), "blank cursor");
-           frame.getContentPane().setCursor(blankCursor);
+            BufferedImage cursorImg = new BufferedImage(16,16,BufferedImage.TYPE_INT_ARGB);
+            Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0,0), "blank cursor");
+            frame.getContentPane().setCursor(blankCursor);
 
-           frame.setBounds(10,10,700,600);
-           frame.setTitle("Pong Game");
-           frame.setResizable(false);
-           frame.setVisible(true);
-           frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-           frame.add(pg);
+            frame.setBounds(10,10,700,600);
+            frame.setTitle("Pong Game");
+            frame.setResizable(false);
+            frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.add(pg);
         });
-    }
-
-    /**
-     * Kills the current program.
-     */
-    public static void kill() {
-        bg = null;
-        pg = null;
-        frame.removeAll();
     }
 }

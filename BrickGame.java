@@ -140,9 +140,8 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             ballList.clear();
             g.setColor(Color.red); // sets color to red and draws the win message
             g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("YOU WIN",220,260);
-            g.drawString("Press Enter to Restart", 190, 300);
-            g.drawString("Press ESC to return to menu", 180, 340);
+            g.drawString("YOU WIN",220,300);
+            g.drawString("Press Enter to Restart", 190, 340);
 
         }
         if (ballList.isEmpty() && totalBricks != 0) { // Lose condition
@@ -150,10 +149,9 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             map.clearMap(); // Clears the map, so that the user can see the lose condition message completely.
             g.setColor(Color.RED); // displays lose condition message.
             g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("Game Over Score : " + score, 190, 260);
+            g.drawString("Game Over Score : " + score, 190, 300);
             g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("Press Enter to Restart", 190, 300);
-            g.drawString("Press ESC to return to menu", 180, 340);
+            g.drawString("Press Enter to Restart", 190, 340);
         }
         g.dispose();
     }
@@ -163,16 +161,18 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      * see if any of the ball objects are intersecting
      * with the player's paddle.
      */
-    private void checkPlayerBallIntersection(Ball ball) {
-        if (new Rectangle((int) (ball.getPosX() + ball.getWidth() / 2), (int) ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX, 550, 100, 8))) {
-            ball.setYDir(-1 * (ball.getYDir()));
-            double center = playerX + 50;
-            double adjustment = (center - ball.getPosX()) * 0.05;
-            // Adjusts the  x-axis direction of the ball
-            if (Math.abs(adjustment) < 3.01) { // Checks to ensure the ball does not begin to move too quickly along the x-axis.
-                ball.setXDir(-1 * adjustment);
-            } else {
-                ball.setXDir(-3 * ball.getXDir());
+    private void checkPlayerBallIntersection() {
+        for(Ball ball : ballList) {
+            if (new Rectangle((int) (ball.getPosX() + ball.getWidth() / 2), (int) ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX, 550, 100, 8))) {
+                ball.setYDir(-1 * (ball.getYDir()));
+                double center = playerX + 50;
+                double adjustment = (center - ball.getPosX()) * 0.05;
+                // Adjusts the  x-axis direction of the ball
+                if (Math.abs(adjustment) < 3.01) { // Checks to ensure the ball does not begin to move too quickly along the x-axis.
+                    ball.setXDir(-1 * adjustment);
+                } else {
+                    ball.setXDir(-3 * ball.getXDir());
+                }
             }
         }
     }
@@ -188,7 +188,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
         for(int i = 0; i < map.getMap().length; i++) {
             for(int j = 0; j < map.getMap()[0].length; j++){
                 if(map.getMap()[i][j]>0){
-                    int brickX = j*Generator.getBrickWidth() + 80;
+                    int brickX = j*Generator.getBrickHeight() + 80;
                     int brickY = i*Generator.getBrickHeight()+50;
                     int brickWidth = Generator.getBrickWidth();
                     int brickHeight = Generator.getBrickHeight();
@@ -240,18 +240,20 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      * Increments the value of the ball's position
      * by the balls direction.
      */
-    private void updateBallLocation(Ball ball) {
-        ball.setPosX(ball.getPosX() + ball.getXDir()); // adjusts the direction of the ball by incrementing the direction
-        ball.setPosY(ball.getPosY() + ball.getYDir());
-        // Checks if the ball is at the edge of the panel, and changes the direction if it is
-        if (ball.getPosX() < 0) {
-            ball.setXDir(-1 * (ball.getXDir()));
-        }
-        if (ball.getPosY() < 0) {
-            ball.setYDir(-1 * (ball.getYDir()));
-        }
-        if (ball.getPosX() > 670) {
-            ball.setXDir(-1 * (ball.getXDir()));
+    private void changeBallDirection() {
+        for(Ball ball : ballList) {
+            ball.setPosX(ball.getPosX() + ball.getXDir()); // adjusts the direction of the ball by incrementing the direction
+            ball.setPosY(ball.getPosY() + ball.getYDir());
+            // Checks if the ball is at the edge of the panel, and changes the direction if it is
+            if (ball.getPosX() < 0) {
+                ball.setXDir(-1 * (ball.getXDir()));
+            }
+            if (ball.getPosY() < 0) {
+                ball.setYDir(-1 * (ball.getYDir()));
+            }
+            if (ball.getPosX() > 670) {
+                ball.setXDir(-1 * (ball.getXDir()));
+            }
         }
     }
 
@@ -268,32 +270,13 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
         timer.start();
         if(play) {
             // Checking for intersections between the balls and the player's paddle.
-            for(Ball ball : ballList) {
-                checkPlayerBallIntersection(ball);
-                // Changes the direction of the ball
-                updateBallLocation(ball);
-            }
+            checkPlayerBallIntersection();
+            // Checking each brick for an intersection
             checkBrickBallIntersection();
+            // Changes the direction of the ball
+            changeBallDirection();
         }
         repaint();
-    }
-
-    public void testHelpBrickIntersection(Ball ball) {
-        ballList.clear();
-        ballList.add(ball);
-        checkBrickBallIntersection();
-    }
-
-    public void testHelpPaddleIntersection(Ball ball) {
-        ballList.clear();
-        ballList.add(ball);
-        checkPlayerBallIntersection(ball);
-    }
-
-    public void testHelpChangeDirection(Ball ball) {
-        ballList.clear();
-        ballList.add(ball);
-        updateBallLocation(ball);
     }
 
     /**
@@ -345,11 +328,6 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                 play = true;
                 repaint(); // paints the new game
             }
-        }
-
-        if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            Driver.kill();
-            Driver.main(null);
         }
     }
 
@@ -551,13 +529,5 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      */
     public ArrayList<Ball> getBallList() {
         return this.ballList;
-    }
-
-    public boolean getWin() {
-        return this.win;
-    }
-
-    public void setWin(boolean win) {
-        this.win = win;
     }
 }
