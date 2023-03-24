@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import java.util.Random;
 
 /**
  * A class that allows users to play a pong game.
@@ -21,6 +22,8 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
      * The boolean that determines if a player has scored.
      */
     private boolean scored = false;
+
+    private Random random;
 
     /**
      * The boolean that determines whether the game is currently being played or not.
@@ -85,6 +88,7 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
         ball.setPosY(500);
         ball.setXDir(-1);
         ball.setYDir(-3);
+        random = new Random();
         compScore = 0;
         playerScore = 0;
         compGoal = new Rectangle(245, 2,200,5);
@@ -125,6 +129,11 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
         } else if(ball.getPosX() -50 < compX) {
             compX -= difficulty;
         }
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("serif", Font.BOLD, 15));
+        g.drawString("USER: " + playerScore, 20, 20);
+        g.drawString("COMP: " + compScore,610 , 20);
         // Player win condition
         if(playerScore == 5) {
             play = false;
@@ -147,13 +156,6 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
             g.setFont(new Font("serif", Font.BOLD, 30));
             g.drawString("YOU LOSE",220,300);
             g.drawString("Press Enter to Restart", 190, 340);
-        }
-
-        if (scored) {
-            play = false;
-            g.setColor(Color.white);
-            g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("Current Score: " + " USER: " + playerScore + " COMP: " + compScore, 150, 260);
         }
 
         g.dispose();
@@ -186,7 +188,7 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
             // Checking to see if the ball intersects with the Computer's goal
             if(new Rectangle((int) (ball.getPosX() + ball.getWidth() / 2), (int) ball.getPosY(), 1, ball.getHeight()).intersects(compGoal)) {
                 playerScore++; // adjust playerScore by one
-                ball.setPosX(200); // Reset ball position to give the computer time to adjust.
+                ball.setPosX(random.nextInt(200) + 200); // Reset ball position to give the computer time to adjust.
                 ball.setPosY(500);
                 ball.setXDir(0); // The ball moves in a straight line, so that both players can have a chance to hit
                 ball.setYDir(-3);
@@ -283,7 +285,7 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
         }
 
         if(e.getKeyCode() == KeyEvent.VK_ENTER) { // If the key pressed is the enter key
-            if(playerScore == 7 || compScore == 7) {
+            if(playerScore == 5 || compScore == 5) {
                 ball = new Ball(); // resets the ball
                 ball.setPosX(120);
                 ball.setPosY(350);
@@ -291,14 +293,11 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
                 ball.setYDir(-2);
                 playerX = 310; // Resets the player and computer x positions
                 compX = 310;
+                playerScore = 0;
+                compScore = 0;
                 repaint();
             }
             else return;
-        }
-
-        if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            Driver.kill();
-            Driver.main(null);
         }
 
         else {
