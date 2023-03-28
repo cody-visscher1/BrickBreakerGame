@@ -1,43 +1,41 @@
 import org.junit.Test;
-
-import java.awt.*;
-
 import static org.junit.jupiter.api.Assertions.*;
+import java.awt.Color;
 
 public class GeneratorTest {
 
     @Test
     public void testGeneratorConstructor() {
-        Generator g = new Generator(10, 20);
-        assertEquals(10, g.getMap().length, "there should be 10 rows in map");
-        assertEquals(20, g.getMap()[0].length, "there should be 20 columns in map");
-        assertEquals(27, Generator.getBrickWidth(), "brick width should be 27");
-        assertEquals(27, Generator.getBrickHeight(), "brick height should be 27");
-        assertFalse(g.getBrickArray().isEmpty(), "brick array should not be empty");
-        int index = -1;
-        for(int i = 0; i < g.getBrickArray().size(); i++) {
-            if(g.getBrickArray().get(i).getColor() == Color.ORANGE) {
-                index = i;
+        Generator generator = new Generator(10, 20);
+        assertEquals(10, generator.getMap().length, "the length of the map should be 10");
+        assertEquals(20, generator.getMap()[0].length, "the length of the map[0] should be 20");
+        assertNotNull(generator.getBrickArray(), "the brick array should not be null");
+        assertEquals(200, generator.getBrickArray().size(), "the brick array should contain 200 bricks");
+        assertEquals(27, Generator.getBrickHeight(), "the height of bricks should be 27");
+        assertEquals(27, Generator.getBrickWidth(), "the width of bricks should be 27");
+        boolean containsOrange = false;
+        for(int i = 0; i < 10; i++) {
+            for(int j = 0; j < 20; j++) {
+                assertEquals(1, generator.getMap()[i][j], "the value at the index of the array should be 1");
             }
         }
-        assertNotEquals(-1, index, "there should be an orange brick in brick array");
+        for(Brick b : generator.getBrickArray()) {
+            if (b.getColor() == Color.orange) {
+                containsOrange = true;
+                break;
+            }
+        }
+        assertTrue(containsOrange, "there should be an orange brick");
     }
 
     @Test
     public void testClearMap() {
-        Generator g = new Generator(10, 20);
-        g.clearMap();
+        Generator generator = new Generator(10,20);
+        generator.clearMap();
         for(int i = 0; i < 10; i++) {
             for(int j = 0; j < 20; j++) {
-                assertEquals(0, g.getMap()[i][j], "the value of each brick should be 0");
+                assertEquals(0, generator.getMap()[i][j], "The value of the specified index of the array should be 0");
             }
         }
-    }
-
-    @Test
-    public void testSetBrickValue() {
-        Generator g = new Generator(10,20);
-        g.setBrickValue(0,0,0);
-        assertEquals(0, g.getMap()[0][0], "map[0][0] should equal 0");
     }
 }

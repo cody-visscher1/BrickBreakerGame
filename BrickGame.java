@@ -329,6 +329,11 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                 repaint(); // paints the new game
             }
         }
+
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            Driver.kill();
+            Driver.main(null);
+        }
     }
 
     /**

@@ -126,7 +126,7 @@ public class Generator {
 
         Random rand = new Random();
         int t = rand.nextInt(200);
-        brickArray.get(t).setColor(Color.ORANGE);
+        brickArray.get(t).setColor(Color.orange);
     }
 
     /**

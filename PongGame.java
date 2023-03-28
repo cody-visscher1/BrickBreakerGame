@@ -300,6 +300,11 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
             else return;
         }
 
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            Driver.kill();
+            Driver.main(null);
+        }
+
         else {
             scored = false;
             play = true;
