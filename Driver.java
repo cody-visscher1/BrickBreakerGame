@@ -3,6 +3,7 @@ import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.awt.event.WindowEvent;
 import javax.swing.WindowConstants;
 import javax.swing.JFrame;
 import javax.swing.JButton;
@@ -15,6 +16,8 @@ import javax.swing.JPanel;
  */
 public class Driver {
 
+    private static JFrame frame;
+
     /**
      * Allows the user to play the game.
      *
@@ -23,7 +26,7 @@ public class Driver {
      *             operation of the program.
      */
     public static void main(final String[] args){
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setTitle("Selection Screen");
         BrickGame bg = new BrickGame();
         PongGame pg = new PongGame();
@@ -74,5 +77,10 @@ public class Driver {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.add(pg);
         });
+    }
+
+    public static void kill() {
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
 }
