@@ -2,42 +2,59 @@ import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.awt.Color;
 
+/**
+ * JUnit tests for the ball class.
+ */
 public class BallTest {
+
+    /**
+     * Tests the ball class' default constructor.
+     */
     @Test
-    public void testBaseBallConstructor() {
-        Ball b = new Ball();
-        assertEquals(Color.GREEN, b.getColor(), "The ball's color should be green");
-        assertEquals(Generator.getBrickHeight() - 5, b.getHeight(), "The height of the ball should" +
-                "be equal to the height of the brick - 5");
-        assertEquals(Generator.getBrickWidth() - 5, b.getWidth(), "The width of the ball should be the" +
-                "equal to the width of the brick - 5");
-        assertEquals(-2, b.getYDir(), "The ball's y-axis direction should be -2");
-        assertEquals(1, b.getXDir(), "The ball's x-axis direction should be 1");
-        assertEquals(350, b.getPosY(), "The ball's y-axis position should be 350");
-        assertEquals(120, b.getPosX(), "The ball's x-axis position should be 120");
+    public void testDefaultConstructor() {
+        Ball ball = new Ball();
+        assertEquals(Color.GREEN, ball.getColor(), "the ball should be green");
+        assertEquals(27, ball.getHeight(), "the height of the ball should be 27");
+        assertEquals(27, ball.getWidth(), "the width of the ball should be 27");
+        assertEquals(-2, ball.getYDir(), "the balls y-axis direction should be -2");
+        assertEquals(1, ball.getXDir(), "the balls x-axis direction should be 1");
+        assertEquals(350, ball.getPosY(), "the balls y-axis position should be 350");
+        assertEquals(120, ball.getPosX(), "the balls x-axis position should 120");
     }
 
+    /**
+     * Tests the ball class' directional constructor.
+     */
     @Test
-    public void testPositionalBallConstructor() {
-        Ball ball = new Ball(true, 1, 1);
-        assertEquals(1, ball.getPosX(), "The ball's x-axis position should equal 1");
-        assertEquals(1, ball.getPosY(), "The ball's y-axis position should equal 1");
+    public void testDirectionalConstructor() {
+        Ball ball = new Ball(1,1,1,1);
+        assertEquals(1, ball.getYDir(), "the ball's y-axis direction should be 1");
+        assertEquals(1, ball.getXDir(), "the ball's x-axis direction should be 1");
+        assertEquals(1, ball.getPosY(), "the ball's y-axis position should be");
+        assertEquals(1, ball.getPosX(), "the ball's x-axis position should be");
     }
 
+    /**
+     * Tests the ball class' size constructor.
+     */
     @Test
-    public void testDirectionalBallConstructor() {
-        Ball ball = new Ball(1, -2, 100, 140);
-        assertEquals(1, ball.getXDir(), "The ball's x-axis direction should equal 1");
-        assertEquals(-2, ball.getYDir(), "The ball's y-axis direction should equal -2");
-        assertEquals(100, ball.getPosX(), "The ball's x-axis position should equal 100");
-        assertEquals(140, ball.getPosY(), "The ball's y-axis position should equal 140");
-    }
-
-    @Test
-    public void testSizeableBallConstructor() {
+    public void testSizeConstructor() {
         Ball ball = new Ball(10, 20);
-        assertEquals(10, ball.getHeight(), "The ball's height should be 10 units");
-        assertEquals(20, ball.getWidth(), "The ball's width should be 20 units");
+        assertEquals(10, ball.getHeight(), "the ball's height should be 10");
+        assertEquals(20, ball.getWidth(), "the ball's width should be 20");
     }
 
+    /**
+     * Tests unused setter methods in the ball class for code coverage.
+     */
+    @Test
+    public void testUnusedSetters() {
+        Ball ball = new Ball();
+        ball.setColor(Color.RED);
+        assertEquals(Color.RED, ball.getColor());
+        ball.setHeight(1);
+        ball.setWidth(1);
+        assertEquals(1, ball.getHeight(), "the ball's height should be 1");
+        assertEquals(1, ball.getWidth(), "the ball's width should be ");
+    }
 }
