@@ -79,7 +79,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      * an executable brick-breaker game.
      */
     public BrickGame() {
-        map = new Generator(10,20);
+        map = new Generator(10, 20);
         ballList.add(new Ball());
         addKeyListener(this); // allows us to use keys for moving the paddle
         addMouseMotionListener(this); // allows us to use the mouse to move the paddle.
@@ -97,30 +97,30 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      *          all the game's objects to the user's
      *          screen.
      */
-    public void paint(final Graphics b){
+    public void paint(final Graphics b) {
         Graphics g = b;
         // Sets the color you are using to draw an object to black
         g.setColor(Color.BLACK);
         // Creates a rectangle and paints it black
-        g.fillRect(1,1,692,592);
+        g.fillRect(1, 1, 692, 592);
         // Draws the map onto the frame.
         map.draw((Graphics2D) g);
         g.setColor(Color.YELLOW);
         // Creates a yellow border on the x-axis
-        g.fillRect(0,0,3,592);
+        g.fillRect(0, 0, 3, 592);
         // creates a yellow border on the y-axis
-        g.fillRect(0,0,692,3);
+        g.fillRect(0, 0, 692, 3);
         g.fillRect(691, 0, 3, 592);
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("serif", Font.BOLD, 25));
-        g.drawString(""+score, 590, 30);
+        g.drawString("" + score, 590, 30);
 
         g.setColor(Color.RED);
         g.fillRect(playerX, 550, 100, 8); // creates the player paddle
 
         // Iterating through all the balls in the ballList and draws them in the panel
-        for(int i = 0; i < ballList.size(); i++) {
+        for (int i = 0; i < ballList.size(); i++) {
             Ball ball = ballList.get(i);
             g.setColor(ball.getColor());
             g.fillOval((int) ball.getPosX(), (int) ball.getPosY(), ball.getWidth(), ball.getHeight());
@@ -134,13 +134,13 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             }
         }
         // Win condition
-        if(totalBricks == 0) {
+        if (totalBricks == 0) {
             win = true;
             play = false; // Stops the game from running without further user interaction.
             ballList.clear();
             g.setColor(Color.red); // sets color to red and draws the win message
             g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("YOU WIN",220,300);
+            g.drawString("YOU WIN", 220, 300);
             g.drawString("Press Enter to Restart", 190, 340);
 
         }
@@ -162,7 +162,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      * with the player's paddle.
      */
     private void checkPlayerBallIntersection() {
-        for(Ball ball : ballList) {
+        for (Ball ball : ballList) {
             if (new Rectangle((int) (ball.getPosX() + ball.getWidth() / 2), (int) ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX, 550, 100, 8))) {
                 ball.setYDir(-1 * (ball.getYDir()));
                 double center = playerX + 50;
@@ -185,16 +185,16 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      */
     private void checkBrickBallIntersection() {
         A:
-        for(int i = 0; i < map.getMap().length; i++) {
-            for(int j = 0; j < map.getMap()[0].length; j++){
-                if(map.getMap()[i][j]>0){
-                    int brickX = j*Generator.getBrickHeight() + 80;
-                    int brickY = i*Generator.getBrickHeight()+50;
+        for (int i = 0; i < map.getMap().length; i++) {
+            for (int j = 0; j < map.getMap()[0].length; j++) {
+                if (map.getMap()[i][j] > 0) {
+                    int brickX = j * Generator.getBrickHeight() + 80;
+                    int brickY = i * Generator.getBrickHeight() + 50;
                     int brickWidth = Generator.getBrickWidth();
                     int brickHeight = Generator.getBrickHeight();
 
                     // Checks to see if the ball intersects with a brick, and if it does, removes the brick.
-                    for(Ball ball : ballList) {
+                    for (Ball ball : ballList) {
                         Rectangle brickrect = new Rectangle(brickX, brickY, brickWidth, brickHeight); // Creates a rectangle for the brick to check for intersections
                         Rectangle ballrect = new Rectangle((int) ball.getPosX(), (int) ball.getPosY(), ball.getWidth(), ball.getHeight()); // Same as above, but ball
                         if (ballrect.intersects(brickrect)) { // Checks for intersections between the brick and ball
@@ -207,22 +207,22 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                                 ball.setYDir(-1 * (ball.getYDir()));
                             }
                             // Checking the color of the brick to see if there is a power up to be applied
-                            if(map.getBrickArray().get(i * 20 + j).getColor() == Color.MAGENTA) { // If the brick is Magenta color
-                                ballList.add(new Ball(-1*ball.getXDir(), ball.getYDir(), ball.getPosX(), ball.getPosY())); // Creates a new ball, but makes it move the opposite direction.
-                                if(ball.getXDir() == 0) { // if the ball is not moving in a direction across the x-axis.
+                            if (map.getBrickArray().get(i * 20 + j).getColor() == Color.MAGENTA) { // If the brick is Magenta color
+                                ballList.add(new Ball(-1 * ball.getXDir(), ball.getYDir(), ball.getPosX(), ball.getPosY())); // Creates a new ball, but makes it move the opposite direction.
+                                if (ball.getXDir() == 0) { // if the ball is not moving in a direction across the x-axis.
                                     ballList.get(ballList.size() - 1).setXDir(-1); // Sets the newest ball's x-axis direction to -1 if the parent's x-axis direction is 0
                                 }
                                 // If the color is blue, three balls are added going three different directions from where the users paddle is.
-                            } else if(map.getBrickArray().get(i * 20 + j).getColor() == Color.BLUE) { // Checks to see if the brick is blue color
+                            } else if (map.getBrickArray().get(i * 20 + j).getColor() == Color.BLUE) { // Checks to see if the brick is blue color
                                 // Shoots three new balls out of the paddle.
                                 ballList.add(new Ball(-1, -2, playerX + 50, 520));
                                 ballList.add(new Ball(0, -2, playerX + 50, 520));
                                 ballList.add(new Ball(1, -2, playerX + 50, 520));
-                            } else if(map.getBrickArray().get(i*20+j).getColor() == Color.ORANGE) {
+                            } else if (map.getBrickArray().get(i * 20 + j).getColor() == Color.ORANGE) {
                                 int temp = ballList.size();
-                                for(int x = 0; x < temp; x++) {
+                                for (int x = 0; x < temp; x++) {
                                     Ball ball1 = ballList.get(x);
-                                    Ball b1 = new Ball(ball1.getXDir() -1, ball1.getYDir() * -1, ball1.getPosX(), ball1.getPosY());
+                                    Ball b1 = new Ball(ball1.getXDir() - 1, ball1.getYDir() * -1, ball1.getPosX(), ball1.getPosY());
                                     Ball b2 = new Ball(ball1.getXDir() + 1, ball1.getYDir(), ball1.getPosX(), ball1.getPosY());
                                     ballList.add(b1);
                                     ballList.add(b2);
@@ -241,7 +241,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      * by the balls direction.
      */
     private void changeBallDirection() {
-        for(Ball ball : ballList) {
+        for (Ball ball : ballList) {
             ball.setPosX(ball.getPosX() + ball.getXDir()); // adjusts the direction of the ball by incrementing the direction
             ball.setPosY(ball.getPosY() + ball.getYDir());
             // Checks if the ball is at the edge of the panel, and changes the direction if it is
@@ -266,9 +266,9 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      *          the frame or by the user pressing the keyboard.
      */
     @Override
-    public void actionPerformed(final ActionEvent e){
+    public void actionPerformed(final ActionEvent e) {
         timer.start();
-        if(play) {
+        if (play) {
             // Checking for intersections between the balls and the player's paddle.
             checkPlayerBallIntersection();
             // Checking each brick for an intersection
@@ -296,23 +296,23 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      */
     @Override
     public void keyPressed(final KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_RIGHT) { // if the key pressed is the right-arrow key
-            if(playerX >= 600) { // doesn't allow the user to go off the screen
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT) { // if the key pressed is the right-arrow key
+            if (playerX >= 600) { // doesn't allow the user to go off the screen
                 playerX = 600;
             } else {
                 moveRight(); // adjusts the paddle position
             }
         }
-        if(e.getKeyCode() == KeyEvent.VK_LEFT) { // if the key pressed is the left-arrow key
-            if(playerX < 0) {
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) { // if the key pressed is the left-arrow key
+            if (playerX < 0) {
                 playerX = 0;
             } else {
                 moveLeft(); // adjusts the paddle position
             }
         }
 
-        if(e.getKeyCode() == KeyEvent.VK_ENTER) { // if the key pressed is enter
-            if(!play) { // if the game is over
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) { // if the key pressed is enter
+            if (!play) { // if the game is over
                 Ball ball = new Ball(); // creates a new ball
                 ballList.add(ball); // adds it to the ballList
                 ball.setPosX(120); // resets the new ball's position
@@ -320,8 +320,9 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
                 ball.setPosY(350);
                 ball.setXDir(-1);
                 ball.setYDir(-2);
-                if(!win) // if the player lost
+                if (!win) { // if the player lost
                     score = 0; // resets score to zero
+                }
                 playerX = 310; // resets player position
                 totalBricks = 200; // resets the number of bricks
                 map = new Generator(10, 20); // creates a new map (replaces bricks that were gone)
@@ -330,8 +331,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
             }
         }
 
-        if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            Driver.kill();
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             Driver.main(null);
         }
     }
@@ -349,17 +349,17 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
     /**
      * Moves the paddle to the right 20 pixels.
      */
-    public void moveRight(){
+    public void moveRight() {
         play = true;
-        playerX+=20;
+        playerX += 20;
     }
 
     /**
      * Moves the paddle to the left 20 pixels.
      */
-    public void moveLeft(){
+    public void moveLeft() {
         play = true;
-        playerX-=20;
+        playerX -= 20;
     }
 
     /**
@@ -380,10 +380,10 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
     @Override
     public void mouseMoved(final MouseEvent e) {
         // The iff statements just ensure that the user paddle cannot leave the screen.
-        if(playerX >= 580) {
+        if (playerX >= 580) {
             playerX = 580;
         }
-        if(playerX < 1) {
+        if (playerX < 1) {
             playerX = 1;
         } else {
             play = true;
@@ -410,7 +410,7 @@ public class BrickGame extends JPanel implements KeyListener, ActionListener, Mo
      *             is going to be cast to the instance
      *             variable, play.
      */
-    public void setPlay(final boolean play){
+    public void setPlay(final boolean play) {
         this.play = play;
     }
 

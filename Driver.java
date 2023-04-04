@@ -25,7 +25,7 @@ public class Driver {
      *             that should be used for the
      *             operation of the program.
      */
-    public static void main(final String[] args){
+    public static void main(final String[] args) {
         frame = new JFrame();
         frame.setTitle("Selection Screen");
         BrickGame bg = new BrickGame();
@@ -42,7 +42,7 @@ public class Driver {
         frame.setVisible(true);
         panel.setVisible(true);
         brickbutton.setBounds(40, 40, 50, 50);
-        pongbutton.setBounds(100,100,50,50);
+        pongbutton.setBounds(100, 100, 50, 50);
         brickbutton.setVisible(true);
         pongbutton.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -50,12 +50,12 @@ public class Driver {
             frame.setVisible(false);
             panel.setVisible(false);
             // Creates a blank cursor
-            BufferedImage cursorImg = new BufferedImage(16,16, BufferedImage.TYPE_INT_ARGB);
-            Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0,0), "blank cursor");
+            BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+            Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "blank cursor");
             frame.getContentPane().setCursor(blankCursor);
 
 
-            frame.setBounds(10,10,700,600);
+            frame.setBounds(10, 10, 700, 600);
             frame.setTitle("Brick Breaker Game");
             frame.setResizable(false);
             frame.setVisible(true);
@@ -66,11 +66,11 @@ public class Driver {
             frame.setVisible(false);
             panel.setVisible(false);
 
-            BufferedImage cursorImg = new BufferedImage(16,16,BufferedImage.TYPE_INT_ARGB);
-            Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0,0), "blank cursor");
+            BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+            Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "blank cursor");
             frame.getContentPane().setCursor(blankCursor);
 
-            frame.setBounds(10,10,700,600);
+            frame.setBounds(10, 10, 700, 600);
             frame.setTitle("Pong Game");
             frame.setResizable(false);
             frame.setVisible(true);

@@ -23,9 +23,9 @@ public class Brick {
      */
     public Brick() {
         int color = rand.nextInt(100);
-        if(color < 90) {
+        if (color < 90) {
             c = Color.WHITE;
-        } else if(color < 95) {
+        } else if (color < 95) {
             c = Color.MAGENTA;
         } else {
             c = Color.BLUE;
@@ -51,7 +51,7 @@ public class Brick {
     }
 
     /**
-     * Allows the user to access the Random objects from other methods
+     * Allows the user to access the Random objects from other methods.
      *
      * @return the random object.
      */

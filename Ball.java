@@ -46,7 +46,7 @@ public class Ball {
     /**
      * Base Constructor for balls.
      */
-    public Ball () {
+    public Ball() {
         color = Color.GREEN;
         height = Generator.getBrickHeight() - 5;
         width = Generator.getBrickWidth() - 5;

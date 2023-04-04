@@ -84,14 +84,14 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
      * Base Constructor for pong game.
      */
     public PongGame() {
-        ball = new Ball(20,20);
+        ball = new Ball(20, 20);
         ball.setPosY(500);
         ball.setXDir(-1);
         ball.setYDir(-3);
         random = new Random();
         compScore = 0;
         playerScore = 0;
-        compGoal = new Rectangle(245, 2,200,5);
+        compGoal = new Rectangle(245, 2, 200, 5);
         playerGoal = new Rectangle(245, 556, 200, 5);
         addKeyListener(this);
         addMouseMotionListener(this);
@@ -110,11 +110,11 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
     public void paint(Graphics g) {
         // Painting the background of the panel
         g.setColor(Color.BLACK); // sets the color that we are working with
-        g.fillRect(1,1,692, 592); // creates a rectangle and fill sit with the color set to g
+        g.fillRect(1, 1, 692, 592); // creates a rectangle and fill sit with the color set to g
         // Adding player and AI paddles
         g.setColor(Color.RED);
         g.fillRect(playerX, 535, 100, 8);
-        g.fillRect((int)compX, 20, 100, 8);
+        g.fillRect((int) compX, 20, 100, 8);
         // Adding player and AI Goals
         g.setColor(Color.BLUE);
         g.fillRect(compGoal.x, compGoal.y, compGoal.width, compGoal.height);
@@ -124,37 +124,37 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
         //Adding ball
         g.setColor(ball.getColor());
         g.fillOval((int) ball.getPosX(), (int) ball.getPosY(), ball.getWidth(), ball.getHeight());
-        if(ball.getPosX() - 50 > compX) { // adjusting the position of the computer paddle to make sure that it is always moving in the right direction.
+        if (ball.getPosX() - 50 > compX) { // adjusting the position of the computer paddle to make sure that it is always moving in the right direction.
             compX += difficulty;
-        } else if(ball.getPosX() -50 < compX) {
+        } else if (ball.getPosX() - 50 < compX) {
             compX -= difficulty;
         }
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("serif", Font.BOLD, 15));
         g.drawString("USER: " + playerScore, 20, 20);
-        g.drawString("COMP: " + compScore,610 , 20);
+        g.drawString("COMP: " + compScore, 610, 20);
         // Player win condition
-        if(playerScore == 5) {
+        if (playerScore == 5) {
             play = false;
             ball.setPosY(-30);
             ball.setXDir(0);
             ball.setYDir(0);
             g.setColor(Color.white);
             g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("YOU WIN",220,300);
+            g.drawString("YOU WIN", 220, 300);
             g.drawString("Press Enter to Restart", 190, 340);
         }
 
         // Computer win condition
-        if(compScore == 5) {
+        if (compScore == 5) {
             play = false;
             ball.setPosY(-30);
             ball.setXDir(0);
             ball.setYDir(0);
             g.setColor(Color.white);
             g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("YOU LOSE",220,300);
+            g.drawString("YOU LOSE", 220, 300);
             g.drawString("Press Enter to Restart", 190, 340);
         }
 
@@ -170,7 +170,7 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
     @Override
     public void actionPerformed(final ActionEvent e) {
         timer.start();
-        if(play) {
+        if (play) {
             // Checking to see if the ball intersects with the player's paddle
             if (new Rectangle((int) (ball.getPosX() + ball.getWidth() / 2), (int) ball.getPosY(), 1, ball.getHeight()).intersects(new Rectangle(playerX, 535, 100, 8))) {
                 ball.setYDir(-1 * (ball.getYDir()));
@@ -186,7 +186,7 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
             }
 
             // Checking to see if the ball intersects with the Computer's goal
-            if(new Rectangle((int) (ball.getPosX() + ball.getWidth() / 2), (int) ball.getPosY(), 1, ball.getHeight()).intersects(compGoal)) {
+            if (new Rectangle((int) (ball.getPosX() + ball.getWidth() / 2), (int) ball.getPosY(), 1, ball.getHeight()).intersects(compGoal)) {
                 playerScore++; // adjust playerScore by one
                 ball.setPosX(random.nextInt(200) + 200); // Reset ball position to give the computer time to adjust.
                 ball.setPosY(500);
@@ -196,7 +196,7 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
             }
 
             // Checking to see if the ball intersects with the Player's goal
-            if(new Rectangle((int) (ball.getPosX() + ball.getWidth() / 2), (int) ball.getPosY(), 1, ball.getHeight()).intersects(playerGoal)) {
+            if (new Rectangle((int) (ball.getPosX() + ball.getWidth() / 2), (int) ball.getPosY(), 1, ball.getHeight()).intersects(playerGoal)) {
                 compScore++;
                 ball.setPosX(200);
                 ball.setPosY(50);
@@ -271,21 +271,23 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
      */
     @Override
     public void keyPressed(final KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_RIGHT) { // If the key pressed is the right-arrow key
-            if(playerX >= 600) { // Makes sure that the player cannot move the paddle out of the panel
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT) { // If the key pressed is the right-arrow key
+            if (playerX >= 600) { // Makes sure that the player cannot move the paddle out of the panel
                 playerX = 600;
             } else {
                 moveRight(); // adjusts the position of the paddle by 20
             }
         }
-        if(e.getKeyCode() == KeyEvent.VK_LEFT) { // If the key pressed is the left-arrow key
-            if(playerX < 1) { // same as above comments
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) { // If the key pressed is the left-arrow key
+            if (playerX < 1) { // same as above comments
                 playerX = 1;
-            } else {moveLeft();}
+            } else {
+                moveLeft();
+            }
         }
 
-        if(e.getKeyCode() == KeyEvent.VK_ENTER) { // If the key pressed is the enter key
-            if(playerScore == 5 || compScore == 5) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) { // If the key pressed is the enter key
+            if (playerScore == 5 || compScore == 5) {
                 ball = new Ball(); // resets the ball
                 ball.setPosX(120);
                 ball.setPosY(350);
@@ -297,10 +299,12 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
                 compScore = 0;
                 repaint();
             }
-            else return;
+            else {
+                return;
+            }
         }
 
-        if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             Driver.kill();
             Driver.main(null);
         }
@@ -339,17 +343,17 @@ public class PongGame extends JPanel implements KeyListener, ActionListener, Mou
      */
     @Override
     public void mouseMoved(final MouseEvent e) {
-        if(playerX >= 580) {
+        if (playerX >= 580) {
             playerX = 580;
         } else {
             play = true;
-            playerX = e.getX()-50;
+            playerX = e.getX() - 50;
         }
-        if(playerX < 0) {
+        if (playerX < 0) {
             playerX = 0;
         } else {
             play = true;
-            playerX = e.getX()-50;
+            playerX = e.getX() - 50;
         }
     }
 

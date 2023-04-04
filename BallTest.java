@@ -27,7 +27,7 @@ public class BallTest {
      */
     @Test
     public void testDirectionalConstructor() {
-        Ball ball = new Ball(1,1,1,1);
+        Ball ball = new Ball(1, 1, 1, 1);
         assertEquals(1, ball.getYDir(), "the ball's y-axis direction should be 1");
         assertEquals(1, ball.getXDir(), "the ball's x-axis direction should be 1");
         assertEquals(1, ball.getPosY(), "the ball's y-axis position should be");
