@@ -19,4 +19,5 @@ public class BrickGameTest {
         assertTrue(bg.getTimer().isRunning(), "timer should be running");
     }
 
+
 }
